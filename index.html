@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rüzly Card Website</title>
+    <title>CardGame Hub - Futuristic Trading Platform</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
@@ -21,6 +21,12 @@
 
         .hidden {
             display: none !important;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #4ecdc4;
         }
 
         /* Header with Login/Signup */
@@ -700,7 +706,7 @@
         <!-- Header -->
         <header class="header">
             <div class="header-content">
-                <h1><i class="fas fa-cards-blank"></i> Rüzly Hub</h1>
+                <h1><i class="fas fa-cards-blank"></i> CardGame Hub</h1>
                 <div id="authButtons" class="auth-buttons">
                     <button class="auth-btn" onclick="openAuthModal('login')">Login</button>
                     <button class="auth-btn" onclick="openAuthModal('signup')">Sign Up</button>
@@ -739,6 +745,7 @@
 
         <!-- Marketplace Tab -->
         <div id="marketplace" class="tab-content active">
+            <div class="loading" id="loadingItems">Loading items...</div>
             <div class="items-grid" id="itemsGrid">
                 <!-- Items will be dynamically loaded here -->
             </div>
@@ -779,6 +786,7 @@
         <div id="my-items" class="tab-content">
             <div class="my-items-container">
                 <h2>My Listed Items</h2>
+                <div class="loading" id="loadingMyItems">Loading your items...</div>
                 <div class="items-grid" id="myItemsGrid">
                     <!-- User's items will be loaded here -->
                 </div>
@@ -956,12 +964,127 @@
         let users = [];
         let currentAuthMode = 'login';
 
+        // Cloud Database Configuration
+        const API_BASE = 'https://api.jsonbin.io/v3/b';
+        const BIN_ID = '65f8b8b2dc74654018b0a123'; // This will be created automatically
+        const API_KEY = '$2a$10$YOUR_API_KEY_HERE'; // You'll need to get this from jsonbin.io
+
         // Sample data
         const sampleItems = [
+            {
+                id: 1,
+                name: "Legendary Card Pack",
+                description: "Contains 5 random legendary cards with special abilities",
+                price: 25,
+                stock: 10,
+                image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGVjZGM0Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5MZWdlbmRhcnkgUGFjazwvdGV4dD48L3N2Zz4=",
+                seller: "admin"
+            },
+            {
+                id: 2,
+                name: "Rare Spell Card",
+                description: "Powerful spell that can turn the tide of battle",
+                price: 15,
+                stock: 5,
+                image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZmY2YjZiIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5TcGVsbCBDYXJkPC90ZXh0Pjwvc3ZnPg==",
+                seller: "admin"
+            }
         ];
 
-        // Load data from localStorage
-        function loadData() {
+        // Cloud Database Functions
+        async function loadDataFromCloud() {
+            try {
+                const response = await fetch(`${API_BASE}/${BIN_ID}/latest`, {
+                    headers: {
+                        'X-Master-Key': API_KEY
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const gameData = data.record;
+                    
+                    users = gameData.users || [];
+                    items = gameData.items || [...sampleItems];
+                    comments = gameData.comments || [];
+                    notifications = gameData.notifications || [];
+                    
+                    // If no items exist, add sample items
+                    if (items.length === 0) {
+                        items = [...sampleItems];
+                        await saveDataToCloud();
+                    }
+                } else {
+                    // If bin doesn't exist, create it with sample data
+                    await createInitialData();
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                // Fallback to localStorage
+                loadDataFromLocal();
+            }
+        }
+
+        async function saveDataToCloud() {
+            try {
+                const gameData = {
+                    users: users,
+                    items: items,
+                    comments: comments,
+                    notifications: notifications,
+                    lastUpdated: new Date().toISOString()
+                };
+
+                const response = await fetch(`${API_BASE}/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify(gameData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to save to cloud');
+                }
+            } catch (error) {
+                console.error('Error saving to cloud:', error);
+                // Fallback to localStorage
+                saveDataToLocal();
+            }
+        }
+
+        async function createInitialData() {
+            const gameData = {
+                users: [],
+                items: [...sampleItems],
+                comments: [],
+                notifications: [],
+                lastUpdated: new Date().toISOString()
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify(gameData)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    // Update BIN_ID with the new bin ID
+                    console.log('New bin created:', result.metadata.id);
+                }
+            } catch (error) {
+                console.error('Error creating initial data:', error);
+            }
+        }
+
+        // Fallback localStorage functions
+        function loadDataFromLocal() {
             const savedUsers = localStorage.getItem('cardGameUsers');
             const savedItems = localStorage.getItem('cardGameItems');
             const savedComments = localStorage.getItem('cardGameComments');
@@ -975,7 +1098,7 @@
                 items = JSON.parse(savedItems);
             } else {
                 items = [...sampleItems];
-                saveData();
+                saveDataToLocal();
             }
             
             if (savedComments) {
@@ -987,8 +1110,7 @@
             }
         }
 
-        // Save data to localStorage
-        function saveData() {
+        function saveDataToLocal() {
             localStorage.setItem('cardGameUsers', JSON.stringify(users));
             localStorage.setItem('cardGameItems', JSON.stringify(items));
             localStorage.setItem('cardGameComments', JSON.stringify(comments));
@@ -996,8 +1118,8 @@
         }
 
         // Initialize app
-        document.addEventListener('DOMContentLoaded', function() {
-            loadData();
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadDataFromCloud();
             loadItems();
             setupEventListeners();
         });
@@ -1072,7 +1194,7 @@
             }
         }
 
-        function handleAuth(e) {
+        async function handleAuth(e) {
             e.preventDefault();
             
             const username = document.getElementById('authUsername').value;
@@ -1098,7 +1220,7 @@
                     isAdmin: password === 'slyrster'
                 });
                 
-                saveData();
+                await saveDataToCloud();
                 alert('Account created successfully!');
                 closeAuthModal();
                 
@@ -1150,9 +1272,17 @@
         }
 
         // Load items to marketplace
-        function loadItems() {
+        async function loadItems() {
             const grid = document.getElementById('itemsGrid');
+            const loading = document.getElementById('loadingItems');
+            
+            loading.style.display = 'block';
             grid.innerHTML = '';
+            
+            // Refresh data from cloud
+            await loadDataFromCloud();
+            
+            loading.style.display = 'none';
             
             items.forEach(item => {
                 if (item.stock > 0) {
@@ -1187,7 +1317,7 @@
                 <div class="item-price">$${item.price}</div>
                 <div class="item-stock">Stock: ${item.stock}</div>
                 <div class="item-seller">Seller: ${item.seller}</div>
-                <button class="buy-btn" ${item.stock === 0 ? 'disabled' : ''} onclick="openPurchaseModal(${item.id})">
+                                <button class="buy-btn" ${item.stock === 0 ? 'disabled' : ''} onclick="openPurchaseModal(${item.id})">
                     ${item.stock === 0 ? 'Out of Stock' : 'Buy Now'}
                 </button>
             `;
@@ -1209,12 +1339,12 @@
         }
 
         // Delete item
-        function deleteItem(itemId) {
+        async function deleteItem(itemId) {
             if (confirm('Are you sure you want to delete this item?')) {
                 const index = items.findIndex(item => item.id === itemId);
                 if (index > -1) {
                     items.splice(index, 1);
-                    saveData();
+                    await saveDataToCloud();
                     loadItems();
                     loadMyItems();
                 }
@@ -1222,7 +1352,7 @@
         }
 
         // Handle edit form
-        function handleEditItem(e) {
+        async function handleEditItem(e) {
             e.preventDefault();
             
             if (currentEditItem) {
@@ -1234,16 +1364,16 @@
                 const imageFile = document.getElementById('editItemImage').files[0];
                 if (imageFile) {
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = async function(e) {
                         currentEditItem.image = e.target.result;
-                        saveData();
+                        await saveDataToCloud();
                         loadItems();
                         loadMyItems();
                         closeEditModal();
                     };
                     reader.readAsDataURL(imageFile);
                 } else {
-                    saveData();
+                    await saveDataToCloud();
                     loadItems();
                     loadMyItems();
                     closeEditModal();
@@ -1289,7 +1419,7 @@
         }
 
         // Sell item functionality
-        function handleSellItem(e) {
+        async function handleSellItem(e) {
             e.preventDefault();
             
             const name = document.getElementById('itemName').value;
@@ -1297,22 +1427,23 @@
             const price = parseInt(document.getElementById('itemPrice').value);
             const stock = parseInt(document.getElementById('itemStock').value);
             const imageFile = document.getElementById('itemImage').files[0];
+            
             let imageData = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNjY3ZWVhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5DdXN0b20gSXRlbTwvdGV4dD48L3N2Zz4=";
             
             if (imageFile) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = async function(e) {
                     imageData = e.target.result;
-                    addNewItem(name, description, price, stock, imageData);
+                    await addNewItem(name, description, price, stock, imageData);
                 };
                 reader.readAsDataURL(imageFile);
             } else {
-                addNewItem(name, description, price, stock, imageData);
+                await addNewItem(name, description, price, stock, imageData);
             }
         }
 
         // Add new item
-        function addNewItem(name, description, price, stock, image) {
+        async function addNewItem(name, description, price, stock, image) {
             const newItem = {
                 id: Date.now(),
                 name: name,
@@ -1324,7 +1455,7 @@
             };
             
             items.push(newItem);
-            saveData();
+            await saveDataToCloud();
             loadItems();
             
             // Clear form
@@ -1347,9 +1478,17 @@
         }
 
         // Load user's items
-        function loadMyItems() {
+        async function loadMyItems() {
             const grid = document.getElementById('myItemsGrid');
+            const loading = document.getElementById('loadingMyItems');
+            
+            loading.style.display = 'block';
             grid.innerHTML = '';
+            
+            // Refresh data from cloud
+            await loadDataFromCloud();
+            
+            loading.style.display = 'none';
             
             const userItems = items.filter(item => item.seller === currentUser.username);
             
@@ -1365,7 +1504,7 @@
         }
 
         // Notifications functionality
-        function addNotification(title, message, recipient) {
+        async function addNotification(title, message, recipient) {
             const notification = {
                 id: Date.now(),
                 title: title,
@@ -1376,7 +1515,7 @@
             };
             
             notifications.push(notification);
-            saveData();
+            await saveDataToCloud();
             
             if (currentUser && currentUser.username === recipient) {
                 updateNotificationBadge();
@@ -1408,8 +1547,11 @@
             document.getElementById('notificationsModal').classList.add('hidden');
         }
 
-        function loadNotifications() {
+        async function loadNotifications() {
             if (!currentUser) return;
+            
+            // Refresh data from cloud
+            await loadDataFromCloud();
             
             const userNotifications = notifications
                 .filter(notif => notif.recipient === currentUser.username)
@@ -1432,9 +1574,9 @@
                     <div class="notification-time">${new Date(notification.timestamp).toLocaleString()}</div>
                 `;
                 
-                notificationDiv.addEventListener('click', () => {
+                notificationDiv.addEventListener('click', async () => {
                     notification.read = true;
-                    saveData();
+                    await saveDataToCloud();
                     updateNotificationBadge();
                     loadNotifications();
                 });
@@ -1453,7 +1595,7 @@
             document.getElementById('adminModal').classList.add('hidden');
         }
 
-        function handleAdminStock(e) {
+        async function handleAdminStock(e) {
             e.preventDefault();
             
             const name = document.getElementById('adminItemName').value;
@@ -1464,17 +1606,17 @@
             
             if (imageFile) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = async function(e) {
                     imageData = e.target.result;
-                    addAdminStock(name, stock, imageData);
+                    await addAdminStock(name, stock, imageData);
                 };
                 reader.readAsDataURL(imageFile);
             } else {
-                addAdminStock(name, stock, imageData);
+                await addAdminStock(name, stock, imageData);
             }
         }
 
-        function addAdminStock(name, stock, image) {
+        async function addAdminStock(name, stock, image) {
             const newItem = {
                 id: Date.now(),
                 name: name,
@@ -1486,7 +1628,7 @@
             };
             
             items.push(newItem);
-            saveData();
+            await saveDataToCloud();
             loadItems();
             
             // Clear form
@@ -1496,7 +1638,10 @@
         }
 
         // Comments functionality
-        function loadComments() {
+        async function loadComments() {
+            // Refresh data from cloud
+            await loadDataFromCloud();
+            
             const section = document.getElementById('commentsSection');
             section.innerHTML = '';
             
@@ -1516,7 +1661,7 @@
             });
         }
 
-        function handleComment(e) {
+        async function handleComment(e) {
             e.preventDefault();
             
             const text = document.getElementById('newComment').value;
@@ -1529,7 +1674,7 @@
                 };
                 
                 comments.push(comment);
-                saveData();
+                await saveDataToCloud();
                 loadComments();
                 document.getElementById('newComment').value = '';
             }
@@ -1551,7 +1696,7 @@
             currentPurchaseItem = null;
         }
 
-        function confirmPurchase() {
+        async function confirmPurchase() {
             const classroom = document.querySelector('input[name="classroom"]:checked');
             const time = document.getElementById('timeSelect').value;
             
@@ -1565,7 +1710,7 @@
                 
                 // Add notification to seller
                 if (currentPurchaseItem.seller !== currentUser.username) {
-                    addNotification(
+                    await addNotification(
                         'Item Sold!',
                         `${currentUser.name} purchased "${currentPurchaseItem.name}" for $${currentPurchaseItem.price}. Delivery to ${classroom.value} at ${time}.`,
                         currentPurchaseItem.seller
@@ -1580,13 +1725,26 @@
                     }
                 }
                 
-                saveData();
+                await saveDataToCloud();
                 loadItems();
                 closePurchaseModal();
                 
                 alert(`Purchase confirmed! Your item will be delivered to ${classroom.value} at ${time}.`);
             }
         }
+
+        // Auto-refresh data every 30 seconds
+        setInterval(async () => {
+            if (currentUser) {
+                await loadDataFromCloud();
+                loadItems();
+                if (document.getElementById('my-items').classList.contains('active')) {
+                    loadMyItems();
+                }
+                updateNotificationBadge();
+            }
+        }, 30000);
     </script>
 </body>
 </html>
+                
