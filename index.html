@@ -252,6 +252,9 @@ const snapshot = await db.collection('notifications')
 .get();
 const count = snapshot.docs.length;
 console.log('Found notifications:', count);
+if(count > 0){
+console.log('First notification:', snapshot.docs[0].data());
+}
 cachedNotifications = snapshot.docs;
 const bellCountEl = qs('#bellCount');
 if(count>0){ 
@@ -261,7 +264,9 @@ bellCountEl.textContent = count;
 bellCountEl.style.display='none'; 
 }
 }catch(e){
-console.error('Error fetching notifications:',e);
+console.error('Error fetching notifications:', e);
+console.error('Error code:', e.code);
+console.error('Error message:', e.message);
 }
 }
 
@@ -275,6 +280,9 @@ notifUnsub=db.collection('notifications')
 .onSnapshot(snapshot=>{
 const count=snapshot.docs.length;
 console.log('Notification snapshot update - count:', count);
+if(count > 0){
+console.log('Latest notification:', snapshot.docs[0].data());
+}
 cachedNotifications = snapshot.docs;
 const bellCountEl=qs('#bellCount');
 if(count>0){
@@ -285,6 +293,8 @@ bellCountEl.style.display='none';
 }
 }, error => {
 console.error('Notification listener error:', error);
+console.error('Error code:', error.code);
+console.error('Error message:', error.message);
 });
 }
 
@@ -307,7 +317,7 @@ return;
 console.log('Showing notifications, cached count:', cachedNotifications.length);
 
 if(cachedNotifications.length===0){
-openModal(`<h2>Notifications</h2><div class="muted">No notifications yet.</div><button class="ghost" id="closeModalBtn">Close</button>`);
+openModal(`<h2>Notifications</h2><div class="muted">No notifications yet. Make sure Firestore security rules allow reading notifications.</div><button class="ghost" id="closeModalBtn">Close</button>`);
 qs('#closeModalBtn').onclick=closeModal;
 }else{
 const notifHtml = cachedNotifications.map(d=>{
