@@ -1,1750 +1,605 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CardGame Hub - Futuristic Trading Platform</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: white;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #4ecdc4;
-        }
-
-        /* Header with Login/Signup */
-        .header {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            padding: 15px 0;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header h1 {
-            font-size: 2em;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .auth-btn {
-            padding: 10px 20px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .auth-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .welcome-text {
-            color: #4ecdc4;
-            font-weight: bold;
-        }
-
-        .logout-btn, .admin-btn, .notifications-btn {
-            padding: 8px 15px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-
-        .logout-btn:hover, .admin-btn:hover, .notifications-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .notifications-btn {
-            position: relative;
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ff6b6b;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        /* Search Section */
-        .search-section {
-            padding: 30px 0;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .search-container i {
-            color: #888;
-            font-size: 20px;
-        }
-
-        .search-container input {
-            flex: 1;
-            padding: 15px 20px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-size: 16px;
-        }
-
-        .search-container input:focus {
-            outline: none;
-            border-color: #4ecdc4;
-        }
-
-        .search-container button {
-            padding: 15px 25px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .search-container button:hover {
-            transform: translateY(-2px);
-        }
-
-        /* Navigation Tabs */
-        .nav-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px 0;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .tab-btn {
-            padding: 15px 30px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .tab-btn.active, .tab-btn:hover {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            border-color: transparent;
-        }
-
-        /* Tab Content */
-        .tab-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px 20px;
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Items Grid */
-        .items-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .item-card {
-            background: linear-gradient(145deg, #2a2a3e, #1a1a2e);
-            border-radius: 15px;
-            padding: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .item-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-            border-color: #4ecdc4;
-        }
-
-        .item-actions {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            display: flex;
-            gap: 5px;
-        }
-
-        .edit-btn, .delete-btn {
-            width: 30px;
-            height: 30px;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .edit-btn {
-            background: #4ecdc4;
-            color: white;
-        }
-
-        .delete-btn {
-            background: #ff6b6b;
-            color: white;
-        }
-
-        .edit-btn:hover, .delete-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .item-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-
-        .item-name {
-            font-size: 1.3em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #4ecdc4;
-        }
-
-        .item-description {
-            color: #ccc;
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-
-        .item-price {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #ff6b6b;
-            margin-bottom: 10px;
-        }
-
-        .item-stock {
-            color: #888;
-            margin-bottom: 15px;
-        }
-
-        .item-seller {
-            color: #888;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-        }
-
-        .buy-btn {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .buy-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .buy-btn:disabled {
-            background: #666;
-            cursor: not-allowed;
-        }
-
-        /* Modal Styles */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: linear-gradient(145deg, #2a2a3e, #1a1a2e);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .modal-header h2 {
-            color: #4ecdc4;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 30px;
-            cursor: pointer;
-        }
-
-        /* Auth Modal */
-        .auth-container {
-            text-align: center;
-        }
-
-        .auth-container h2 {
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 30px;
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .auth-tab.active {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-        }
-
-        .auth-tab:first-child {
-            border-radius: 10px 0 0 10px;
-        }
-
-        .auth-tab:last-child {
-            border-radius: 0 10px 10px 0;
-        }
-
-        .input-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .input-group i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #888;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 15px 15px 15px 45px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: #4ecdc4;
-            box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
-        }
-
-        .auth-btn-submit {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .auth-btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Sell Form */
-        .sell-form-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: linear-gradient(145deg, #2a2a3e, #1a1a2e);
-            border-radius: 15px;
-            padding: 30px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .sell-form-container h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #4ecdc4;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #ccc;
-            font-weight: bold;
-        }
-
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-size: 16px;
-        }
-
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            outline: none;
-            border-color: #4ecdc4;
-        }
-
-        .image-preview {
-            margin-top: 10px;
-        }
-
-        .image-preview img {
-            max-width: 200px;
-            max-height: 200px;
-            border-radius: 8px;
-        }
-
-        .sell-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .sell-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        /* Admin Modal */
-        .admin-modal {
-            max-width: 800px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .admin-section {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-
-        .admin-section h3 {
-            color: #4ecdc4;
-            margin-bottom: 20px;
-        }
-
-        .comments-section {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
-
-        .comment {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 4px solid #4ecdc4;
-        }
-
-        .comment-author {
-            font-weight: bold;
-            color: #ff6b6b;
-            margin-bottom: 5px;
-        }
-
-        .comment-text {
-            color: #ccc;
-        }
-
-        /* Notifications Modal */
-        .notifications-modal {
-            max-width: 600px;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-
-        .notification-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 4px solid #4ecdc4;
-            transition: all 0.3s ease;
-        }
-
-        .notification-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .notification-title {
-            font-weight: bold;
-            color: #4ecdc4;
-            margin-bottom: 5px;
-        }
-
-        .notification-message {
-            color: #ccc;
-            margin-bottom: 5px;
-        }
-
-        .notification-time {
-            color: #888;
-            font-size: 0.9em;
-        }
-
-        .notification-item.unread {
-            border-left-color: #ff6b6b;
-            background: rgba(255, 107, 107, 0.1);
-        }
-
-        /* Purchase Modal */
-        .purchase-content {
-            text-align: center;
-        }
-
-        .classroom-selection, .time-selection {
-            margin-bottom: 30px;
-        }
-
-        .classroom-selection h3, .time-selection h3 {
-            color: #4ecdc4;
-            margin-bottom: 15px;
-        }
-
-        .classroom-options {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        .classroom-options label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            padding: 10px 20px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .classroom-options label:hover {
-            border-color: #4ecdc4;
-        }
-
-        .classroom-options input[type="radio"] {
-            width: auto;
-        }
-
-        .classroom-options input[type="radio"]:checked + span {
-            color: #4ecdc4;
-            font-weight: bold;
-        }
-
-        .time-selection select {
-            max-width: 200px;
-            margin: 0 auto;
-        }
-
-        .purchase-btn {
-            padding: 15px 40px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .purchase-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .search-container {
-                flex-direction: column;
-            }
-
-            .nav-tabs {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .items-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .classroom-options {
-                flex-direction: column;
-            }
-        }
-    </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Rüzly Card Shop </title>
+<style>
+  :root{
+    --bg:#0f0426;
+    --panel:#f6f4ff;
+    --accent:#7a3cff;
+    --accent-2:#b88bff;
+    --muted:#9b91b3;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,#0d0320 0%, #12062a 60%);color:var(--panel);-webkit-font-smoothing:antialiased}
+  .container{max-width:1100px;margin:28px auto;padding:20px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+  .logo{display:flex;align-items:center;gap:12px}
+  .mark{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:0 8px 30px rgba(122,60,255,0.18)}
+  .searchbar{flex:1;margin-left:14px}
+  .searchbar input{width:100%;padding:12px 16px;border-radius:12px;border:none;outline:none;background:rgba(255,255,255,0.04);color:var(--panel);font-size:15px}
+  .top-actions{display:flex;gap:8px;align-items:center}
+  button.btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:none;padding:10px 14px;border-radius:10px;color:white;font-weight:600;cursor:pointer;box-shadow:0 8px 20px rgba(122,60,255,0.12)}
+  button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.05);color:var(--panel);padding:8px 12px;border-radius:10px}
+  .smallbtn{padding:6px 8px;font-size:13px}
+  main{display:grid;grid-template-columns:330px 1fr;gap:20px}
+  .sidebar{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:14px;box-shadow:0 8px 30px rgba(2,2,2,0.4)}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;margin-bottom:12px}
+  .product-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+  .product{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px;display:flex;flex-direction:column;gap:10px}
+  .product img{width:100%;height:140px;object-fit:cover;border-radius:8px;background:linear-gradient(180deg,#ddd,#bbb)}
+  .meta{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}
+  .tag{padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.03);font-size:12px}
+  .buy-row{display:flex;gap:8px;align-items:center}
+  .muted{color:var(--muted)}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(3,2,10,0.6);display:none;align-items:center;justify-content:center;z-index:40}
+  .modal{width:560px;background:linear-gradient(180deg,#12051f,#0b0416);border-radius:12px;padding:18px;color:var(--panel);box-shadow:0 20px 80px rgba(0,0,0,0.6)}
+  .input,textarea,select{width:100%;padding:10px;border-radius:10px;border:none;background:rgba(255,255,255,0.03);color:var(--panel);outline:none;margin-bottom:8px}
+  .badge{background:#ff3b7a;color:white;padding:2px 6px;border-radius:999px;font-size:12px;margin-left:6px}
+  .bell{position:relative;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+  footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+  .row{display:flex;gap:8px;align-items:center}
+  .muted-small{font-size:13px;color:var(--muted)}
+  .googleBtn{background:linear-gradient(90deg,#ffffff,#f1f1f1);color:#111;border-radius:10px;padding:8px 12px;font-weight:700}
+  @media (max-width:900px){main{grid-template-columns:1fr} .searchbar{order:3}}
+</style>
 </head>
 <body>
-    <div id="app">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <h1><i class="fas fa-cards-blank"></i> CardGame Hub</h1>
-                <div id="authButtons" class="auth-buttons">
-                    <button class="auth-btn" onclick="openAuthModal('login')">Login</button>
-                    <button class="auth-btn" onclick="openAuthModal('signup')">Sign Up</button>
-                </div>
-                <div id="userInfo" class="user-info hidden">
-                    <span class="welcome-text">Welcome, <span id="currentUserName"></span>!</span>
-                    <button id="notificationsBtn" class="notifications-btn" onclick="openNotifications()">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge hidden" id="notificationBadge">0</span>
-                    </button>
-                    <button id="adminBtn" class="admin-btn hidden">
-                        <i class="fas fa-cog"></i> Admin
-                    </button>
-                    <button id="logoutBtn" class="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
-                </div>
-            </div>
-        </header>
-
-        <!-- Search Bar -->
-        <div class="search-section">
-            <div class="search-container">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Search cards, packs, or items...">
-                <button id="searchBtn">Search</button>
-            </div>
-        </div>
-
-        <!-- Navigation Tabs -->
-        <nav class="nav-tabs">
-            <button class="tab-btn active" data-tab="marketplace">Marketplace</button>
-            <button class="tab-btn" data-tab="sell">Sell Items</button>
-            <button class="tab-btn" data-tab="my-items">My Items</button>
-        </nav>
-
-        <!-- Marketplace Tab -->
-        <div id="marketplace" class="tab-content active">
-            <div class="loading" id="loadingItems">Loading items...</div>
-            <div class="items-grid" id="itemsGrid">
-                <!-- Items will be dynamically loaded here -->
-            </div>
-        </div>
-
-        <!-- Sell Items Tab -->
-        <div id="sell" class="tab-content">
-            <div class="sell-form-container">
-                <h2>Sell Your Items</h2>
-                <form id="sellForm">
-                    <div class="form-group">
-                        <label>Item Name</label>
-                        <input type="text" id="itemName" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea id="itemDescription" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Price</label>
-                        <input type="number" id="itemPrice" min="1" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Stock Quantity</label>
-                        <input type="number" id="itemStock" min="1" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Item Image</label>
-                        <input type="file" id="itemImage" accept="image/*">
-                        <div class="image-preview" id="imagePreview"></div>
-                    </div>
-                    <button type="submit" class="sell-btn">List Item</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- My Items Tab -->
-        <div id="my-items" class="tab-content">
-            <div class="my-items-container">
-                <h2>My Listed Items</h2>
-                <div class="loading" id="loadingMyItems">Loading your items...</div>
-                <div class="items-grid" id="myItemsGrid">
-                    <!-- User's items will be loaded here -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Auth Modal -->
-        <div id="authModal" class="modal hidden">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 id="authModalTitle">Login</h2>
-                    <button class="close-btn" onclick="closeAuthModal()">&times;</button>
-                </div>
-                <div class="auth-container">
-                    <div class="auth-tabs">
-                        <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
-                        <button class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</button>
-                    </div>
-                    <form id="authForm">
-                        <div class="input-group">
-                            <i class="fas fa-user"></i>
-                            <input type="text" id="authUsername" placeholder="Username" required>
-                        </div>
-                        <div class="input-group">
-                            <i class="fas fa-id-card"></i>
-                            <input type="text" id="authName" placeholder="Full Name" required>
-                        </div>
-                        <div class="input-group">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" id="authPassword" placeholder="Password" required>
-                        </div>
-                        <div id="confirmPasswordGroup" class="input-group hidden">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" id="authConfirmPassword" placeholder="Confirm Password">
-                        </div>
-                        <button type="submit" class="auth-btn-submit" id="authSubmitBtn">Login</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Notifications Modal -->
-        <div id="notificationsModal" class="modal hidden">
-            <div class="modal-content notifications-modal">
-                <div class="modal-header">
-                    <h2><i class="fas fa-bell"></i> Notifications</h2>
-                    <button class="close-btn" onclick="closeNotifications()">&times;</button>
-                </div>
-                <div id="notificationsList">
-                    <!-- Notifications will be loaded here -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Admin Panel Modal -->
-        <div id="adminModal" class="modal hidden">
-            <div class="modal-content admin-modal">
-                <div class="modal-header">
-                    <h2><i class="fas fa-crown"></i> Admin Panel</h2>
-                    <button class="close-btn" onclick="closeAdminPanel()">&times;</button>
-                </div>
-                <div class="admin-content">
-                    <div class="admin-section">
-                        <h3>Add Stock Items</h3>
-                        <form id="adminStockForm">
-                            <div class="form-group">
-                                <label>Item Name</label>
-                                <input type="text" id="adminItemName" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Stock Quantity</label>
-                                <input type="number" id="adminStock" min="1" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Item Image</label>
-                                <input type="file" id="adminItemImage" accept="image/*">
-                            </div>
-                            <button type="submit" class="auth-btn-submit">Add Stock</button>
-                        </form>
-                    </div>
-                    <div class="admin-section">
-                        <h3>Comments</h3>
-                        <div class="comments-section" id="commentsSection">
-                            <!-- Comments will be loaded here -->
-                        </div>
-                        <form id="commentForm">
-                            <textarea id="newComment" placeholder="Add a comment..." style="width: 100%; padding: 12px; border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-size: 16px; margin-bottom: 10px;"></textarea>
-                            <button type="submit" class="auth-btn-submit">Post Comment</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Purchase Modal -->
-        <div id="purchaseModal" class="modal hidden">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Complete Purchase</h2>
-                    <button class="close-btn" onclick="closePurchaseModal()">&times;</button>
-                </div>
-                <div class="purchase-content">
-                    <div class="classroom-selection">
-                        <h3>Select Classroom</h3>
-                        <div class="classroom-options">
-                            <label>
-                                <input type="radio" name="classroom" value="8-D">
-                                <span>8-D Classroom</span>
-                            </label>
-                            <label>
-                                <input type="radio" name="classroom" value="8-C">
-                                <span>8-C Classroom</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="time-selection">
-                        <h3>Select Time</h3>
-                        <select id="timeSelect">
-                            <option value="9:00 AM">9:00 AM</option>
-                            <option value="10:00 AM">10:00 AM</option>
-                            <option value="11:00 AM">11:00 AM</option>
-                            <option value="1:00 PM">1:00 PM</option>
-                            <option value="2:00 PM">2:00 PM</option>
-                            <option value="3:00 PM">3:00 PM</option>
-                        </select>
-                    </div>
-                    <button onclick="confirmPurchase()" class="purchase-btn">Confirm Purchase</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Edit Item Modal -->
-        <div id="editModal" class="modal hidden">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Edit Item</h2>
-                    <button class="close-btn" onclick="closeEditModal()">&times;</button>
-                </div>
-                <form id="editForm">
-                    <div class="form-group">
-                        <label>Item Name</label>
-                        <input type="text" id="editItemName" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea id="editItemDescription" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Price</label>
-                        <input type="number" id="editItemPrice" min="1" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Stock Quantity</label>
-                        <input type="number" id="editItemStock" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Item Image</label>
-                        <input type="file" id="editItemImage" accept="image/*">
-                        <div class="image-preview" id="editImagePreview"></div>
-                    </div>
-                    <button type="submit" class="auth-btn-submit">Update Item</button>
-                </form>
-            </div>
-        </div>
+<div class="container">
+  <header>
+    <div class="logo">
+      <div class="mark">CV</div>
+      <div>
+        <h1 style="margin:0">Rüzly Card Shop</h1>
+        <div class="muted" style="font-size:13px">Purple • Futuristic • Live</div>
+      </div>
     </div>
 
-    <script>
-        // Global variables
-        let currentUser = null;
-        let items = [];
-        let comments = [];
-        let notifications = [];
-        let currentPurchaseItem = null;
-        let currentEditItem = null;
-        let users = [];
-        let currentAuthMode = 'login';
+    <div class="searchbar">
+      <input id="search" placeholder="Search cards, packs, sellers..." />
+    </div>
 
-        // Cloud Database Configuration
-        const API_BASE = 'https://api.jsonbin.io/v3/b';
-        const BIN_ID = '65f8b8b2dc74654018b0a123'; // This will be created automatically
-        const API_KEY = '$2a$10$YOUR_API_KEY_HERE'; // You'll need to get this from jsonbin.io
+    <div class="top-actions">
+      <div id="userArea"></div>
+      <div id="notifyArea"></div>
+      <button id="signinBtn" class="ghost">Sign in</button>
+    </div>
+  </header>
 
-        // Sample data
-        const sampleItems = [
-            {
-                id: 1,
-                name: "Legendary Card Pack",
-                description: "Contains 5 random legendary cards with special abilities",
-                price: 25,
-                stock: 10,
-                image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGVjZGM0Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5MZWdlbmRhcnkgUGFjazwvdGV4dD48L3N2Zz4=",
-                seller: "admin"
-            },
-            {
-                id: 2,
-                name: "Rare Spell Card",
-                description: "Powerful spell that can turn the tide of battle",
-                price: 15,
-                stock: 5,
-                image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZmY2YjZiIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5TcGVsbCBDYXJkPC90ZXh0Pjwvc3ZnPg==",
-                seller: "admin"
-            }
-        ];
+  <main>
+    <aside class="sidebar">
+      <div class="card">
+        <h3>Quick Filters</h3>
+        <div>
+          <label class="muted">Category
+            <select id="filterCategory" class="input">
+              <option value="">All</option>
+              <option>Pack</option>
+              <option>Single</option>
+              <option>Accessory</option>
+            </select>
+          </label>
+          <label class="muted">Show only in-stock <input type="checkbox" id="inStockOnly" /></label>
+          <label class="muted">Sort by
+            <select id="sortBy" class="input">
+              <option value="new">Newest</option>
+              <option value="price_asc">Price ↑</option>
+              <option value="price_desc">Price ↓</option>
+            </select>
+          </label>
+        </div>
+      </div>
 
-        // Cloud Database Functions
-        async function loadDataFromCloud() {
-            try {
-                const response = await fetch(`${API_BASE}/${BIN_ID}/latest`, {
-                    headers: {
-                        'X-Master-Key': API_KEY
-                    }
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    const gameData = data.record;
-                    
-                    users = gameData.users || [];
-                    items = gameData.items || [...sampleItems];
-                    comments = gameData.comments || [];
-                    notifications = gameData.notifications || [];
-                    
-                    // If no items exist, add sample items
-                    if (items.length === 0) {
-                        items = [...sampleItems];
-                        await saveDataToCloud();
-                    }
-                } else {
-                    // If bin doesn't exist, create it with sample data
-                    await createInitialData();
-                }
-            } catch (error) {
-                console.error('Error loading data:', error);
-                // Fallback to localStorage
-                loadDataFromLocal();
-            }
-        }
+      <div class="card">
+        <h3>Your Cart</h3>
+        <div id="cartList" class="muted">Cart empty — use Buy on a product</div>
+      </div>
 
-        async function saveDataToCloud() {
-            try {
-                const gameData = {
-                    users: users,
-                    items: items,
-                    comments: comments,
-                    notifications: notifications,
-                    lastUpdated: new Date().toISOString()
-                };
+      <div class="card">
+        <h3>Sell an item</h3>
+        <div class="muted">Signed-in users can list items for sale.</div>
+        <div style="margin-top:8px"><button id="sellBtn" class="btn">Create Listing</button></div>
+      </div>
 
-                const response = await fetch(`${API_BASE}/${BIN_ID}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY
-                    },
-                    body: JSON.stringify(gameData)
-                });
+      <div class="card">
+        <h3>Info</h3>
+        <div class="muted">Buyers must select Classroom (8-D or 8-C) and a pickup time.</div>
+      </div>
+    </aside>
 
-                if (!response.ok) {
-                    throw new Error('Failed to save to cloud');
-                }
-            } catch (error) {
-                console.error('Error saving to cloud:', error);
-                // Fallback to localStorage
-                saveDataToLocal();
-            }
-        }
+    <section>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <h2 style="margin:0">Products</h2>
+        <div class="muted" id="productCount">0 items</div>
+      </div>
 
-        async function createInitialData() {
-            const gameData = {
-                users: [],
-                items: [...sampleItems],
-                comments: [],
-                notifications: [],
-                lastUpdated: new Date().toISOString()
-            };
+      <div id="products" class="product-list"></div>
 
-            try {
-                const response = await fetch(`${API_BASE}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY
-                    },
-                    body: JSON.stringify(gameData)
-                });
+      <footer>Made with ♥ —Rüzly Card Shop 4v </footer>
+    </section>
+  </main>
+</div>
 
-                if (response.ok) {
-                    const result = await response.json();
-                    // Update BIN_ID with the new bin ID
-                    console.log('New bin created:', result.metadata.id);
-                }
-            } catch (error) {
-                console.error('Error creating initial data:', error);
-            }
-        }
+<!-- Modal -->
+<div id="modalBack" class="modal-backdrop"><div class="modal" id="modalContent"></div></div>
 
-        // Fallback localStorage functions
-        function loadDataFromLocal() {
-            const savedUsers = localStorage.getItem('cardGameUsers');
-            const savedItems = localStorage.getItem('cardGameItems');
-            const savedComments = localStorage.getItem('cardGameComments');
-            const savedNotifications = localStorage.getItem('cardGameNotifications');
-            
-            if (savedUsers) {
-                users = JSON.parse(savedUsers);
-            }
-            
-            if (savedItems) {
-                items = JSON.parse(savedItems);
-            } else {
-                items = [...sampleItems];
-                saveDataToLocal();
-            }
-            
-            if (savedComments) {
-                comments = JSON.parse(savedComments);
-            }
-            
-            if (savedNotifications) {
-                notifications = JSON.parse(savedNotifications);
-            }
-        }
+<!-- Firebase SDKs (compat for simplicity) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
 
-        function saveDataToLocal() {
-            localStorage.setItem('cardGameUsers', JSON.stringify(users));
-            localStorage.setItem('cardGameItems', JSON.stringify(items));
-            localStorage.setItem('cardGameComments', JSON.stringify(comments));
-            localStorage.setItem('cardGameNotifications', JSON.stringify(notifications));
-        }
+<script>
+/* --------------------- Put your firebaseConfig below --------------------- */
+const firebaseConfig = {
+  apiKey: "AIzaSyDzGTlPWmfz9gg-0EYvvNjZr0dJahTcMrg",
+  authDomain: "ruzly-7af10.firebaseapp.com",
+  projectId: "ruzly-7af10",
+  storageBucket: "ruzly-7af10.firebasestorage.app",
+  messagingSenderId: "223649665023",
+  appId: "1:223649665023:web:c963b16cf626c5184d61ca",
+  measurementId: "G-X4NKTW89XH"
+};
+/* ------------------------------------------------------------------------ */
 
-        // Initialize app
-        document.addEventListener('DOMContentLoaded', async function() {
-            await loadDataFromCloud();
-            loadItems();
-            setupEventListeners();
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
+
+const qs = s => document.querySelector(s);
+const qsa = s => document.querySelectorAll(s);
+let currentUser = null;
+function id(){ return 'i'+Math.random().toString(36).slice(2,9); }
+function money(n){ return '₺'+Number(n||0).toFixed(2); }
+function escapeHtml(str){ return String(str||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
+function openModal(html){ qs('#modalContent').innerHTML = html; qs('#modalBack').style.display = 'flex'; }
+function closeModal(){ qs('#modalBack').style.display = 'none'; qs('#modalContent').innerHTML = ''; }
+
+/* -------------------- AUTH UI (fixed register + Google) -------------------- */
+function showAuthModal(){
+  openModal(`<h2 style="margin-top:0">Sign in / Register</h2>
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <button id="tabSign" class="smallbtn ghost">Sign in</button>
+      <button id="tabReg" class="smallbtn ghost">Register</button>
+      <div style="flex:1"></div>
+      <button id="closeModal" class="ghost">Close</button>
+    </div>
+    <div id="authBody"></div>
+    <div class="muted-small" style="margin-top:6px">Or use Google for one-click sign-in.</div>
+  `);
+  qs('#tabSign').onclick = ()=>renderSignForm();
+  qs('#tabReg').onclick = ()=>renderRegForm();
+  qs('#closeModal').onclick = closeModal;
+  renderSignForm();
+}
+
+function renderSignForm(){
+  qs('#authBody').innerHTML = `
+    <input id="si_email" class="input" placeholder="Email" />
+    <input id="si_pass" class="input" placeholder="Password" type="password" />
+    <div style="display:flex;gap:8px">
+      <button id="doSign" class="btn">Sign in</button>
+      <button id="doGoogle1" class="googleBtn">Sign in with Google</button>
+    </div>
+    <div id="authMsg" class="muted-small" style="margin-top:6px"></div>
+  `;
+  qs('#doSign').onclick = async ()=>{
+    const email = qs('#si_email').value.trim();
+    const pass = qs('#si_pass').value;
+    if(!validateEmail(email)){ qs('#authMsg').textContent = 'Enter a valid email.'; return; }
+    if(!pass || pass.length < 6){ qs('#authMsg').textContent = 'Password required (min 6 chars).'; return; }
+    try{
+      await auth.signInWithEmailAndPassword(email, pass);
+      closeModal();
+    }catch(e){ qs('#authMsg').textContent = 'Sign in failed: '+e.message; }
+  };
+  qs('#doGoogle1').onclick = googleSignIn;
+}
+
+function renderRegForm(){
+  qs('#authBody').innerHTML = `
+    <input id="r_name" class="input" placeholder="Display name" />
+    <input id="r_email" class="input" placeholder="Email" />
+    <input id="r_pass" class="input" placeholder="Password (min 6)" type="password" />
+    <div style="display:flex;gap:8px">
+      <button id="doReg" class="btn">Register</button>
+      <button id="doGoogle2" class="googleBtn">Register with Google</button>
+    </div>
+    <div id="authMsg" class="muted-small" style="margin-top:6px"></div>
+  `;
+  qs('#doReg').onclick = async ()=>{
+    const name = qs('#r_name').value.trim();
+    const email = qs('#r_email').value.trim();
+    const pass = qs('#r_pass').value;
+    if(!name) { qs('#authMsg').textContent = 'Enter display name.'; return; }
+    if(!validateEmail(email)){ qs('#authMsg').textContent = 'Enter a valid email.'; return; }
+    if(!pass || pass.length < 6){ qs('#authMsg').textContent = 'Password must be at least 6 characters.'; return; }
+    try{
+      const cred = await auth.createUserWithEmailAndPassword(email, pass);
+      await cred.user.updateProfile({ displayName: name });
+      await db.collection('users').doc(cred.user.uid).set({
+        name: name,
+        email: email,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      closeModal();
+    }catch(e){ qs('#authMsg').textContent = 'Registration failed: '+e.message; }
+  };
+  qs('#doGoogle2').onclick = googleSignIn;
+}
+
+function validateEmail(e){ return !!e && /\S+@\S+\.\S+/.test(e); }
+
+async function googleSignIn(){
+  const provider = new firebase.auth.GoogleAuthProvider();
+  try{
+    const result = await auth.signInWithPopup(provider);
+    // create user doc if missing
+    const u = result.user;
+    const doc = await db.collection('users').doc(u.uid).get();
+    if(!doc.exists){
+      await db.collection('users').doc(u.uid).set({
+        name: u.displayName || '',
+        email: u.email,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+    closeModal();
+  }catch(e){ alert('Google sign-in failed: ' + e.message); }
+}
+
+/* -------------------- Render user area & notifications -------------------- */
+function renderUserArea(){
+  if(currentUser){
+    qs('#userArea').innerHTML = `<div style="display:flex;gap:10px;align-items:center">
+      <div style="font-weight:700">${escapeHtml(currentUser.displayName || currentUser.email)}</div>
+      <button id="acctBtn" class="ghost">Account</button>
+    </div>`;
+    qs('#signinBtn').textContent = 'Sign out';
+    qs('#signinBtn').onclick = ()=>auth.signOut();
+    qs('#sellBtn').onclick = showSellModal;
+    qs('#acctBtn').onclick = showAccountModal;
+  } else {
+    qs('#userArea').innerHTML = '';
+    qs('#signinBtn').textContent = 'Sign in';
+    qs('#signinBtn').onclick = showAuthModal;
+    qs('#sellBtn').onclick = showAuthModal;
+  }
+  // notification area is handled by startNotificationsListener
+}
+
+/* -------------------- Products (Firestore realtime) -------------------- */
+const productsEl = qs('#products');
+const productCountEl = qs('#productCount');
+let itemsUnsub = null;
+
+function startItemsListener(){
+  if(itemsUnsub) itemsUnsub();
+  itemsUnsub = db.collection('items').orderBy('createdAt','desc')
+    .onSnapshot(snapshot=>{
+      const arr = [];
+      snapshot.forEach(doc => { const d = doc.data(); d.id = doc.id; arr.push(d); });
+      renderProducts(arr);
+    }, err => console.error(err));
+}
+
+function renderProducts(items){
+  const q = qs('#search').value.toLowerCase();
+  const cat = qs('#filterCategory').value;
+  const inStockOnly = qs('#inStockOnly').checked;
+  const sortBy = qs('#sortBy').value;
+  let filtered = items.slice();
+  if(q) filtered = filtered.filter(it => (it.title + (it.desc||'') + (it.ownerName||'')).toLowerCase().includes(q));
+  if(cat) filtered = filtered.filter(it => it.cat === cat);
+  if(inStockOnly) filtered = filtered.filter(it => (it.stock || 0) > 0);
+  if(sortBy === 'price_asc') filtered.sort((a,b)=>(a.price||0)-(b.price||0));
+  if(sortBy === 'price_desc') filtered.sort((a,b)=>(b.price||0)-(a.price||0));
+  productCountEl.textContent = `${filtered.length} items`;
+  productsEl.innerHTML = '';
+  if(filtered.length === 0){ productsEl.innerHTML = `<div class="muted">No products found.</div>`; return; }
+  filtered.forEach(it=>{
+    const owner = it.ownerName || 'Seller';
+    const div = document.createElement('div');
+    div.className = 'product';
+    div.innerHTML = `
+      <img src="${escapeHtml(it.imageURL || placeholder(it.title))}" alt="${escapeHtml(it.title)}"/>
+      <h3>${escapeHtml(it.title)}</h3>
+      <div class="meta"><div class="muted">${escapeHtml(it.desc||'')}</div><div class="tag">${escapeHtml(it.cat||'')}</div></div>
+      <div class="meta"><div class="muted">${money(it.price||0)}</div><div class="muted">${(it.stock||0)} left</div></div>
+      <div class="meta"><div class="muted">Seller: ${escapeHtml(owner)}</div><div class="muted">ID:${escapeHtml(it.id)}</div></div>
+      <div class="buy-row">
+        <button class="btn buyBtn" data-id="${escapeHtml(it.id)}">Buy</button>
+        <button class="ghost viewBtn" data-id="${escapeHtml(it.id)}">View</button>
+      </div>
+    `;
+    productsEl.appendChild(div);
+  });
+  qsa('.buyBtn').forEach(b => b.onclick = () => openBuy(b.dataset.id));
+  qsa('.viewBtn').forEach(b => b.onclick = () => openView(b.dataset.id));
+}
+
+function placeholder(title){
+  const svg = encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='#7a3cff'/><stop offset='1' stop-color='#b88bff'/></linearGradient></defs><rect width='100%' height='100%' fill='url(#g)'/><text x='50%' y='50%' fill='white' font-size='28' font-family='sans-serif' dominant-baseline='middle' text-anchor='middle'>${escapeHtml(title)}</text></svg>`);
+  return `data:image/svg+xml;utf8,${svg}`;
+}
+
+/* -------------------- View & Buy flow (transaction-safe) -------------------- */
+function openView(itemId){
+  db.collection('items').doc(itemId).get().then(doc=>{
+    if(!doc.exists) return alert('Item not found');
+    const it = doc.data(); it.id = doc.id;
+    openModal(`<h2>${escapeHtml(it.title)}</h2>
+      <div style="display:flex;gap:12px">
+        <img src="${escapeHtml(it.imageURL||placeholder(it.title))}" style="width:180px;height:120px;object-fit:cover;border-radius:8px" />
+        <div style="flex:1">
+          <div class="muted">${escapeHtml(it.desc||'')}</div>
+          <div style="margin-top:8px">${money(it.price||0)}</div>
+          <div style="margin-top:8px">Stock: <strong>${it.stock||0}</strong></div>
+          <div style="margin-top:12px"><button class="btn" id="buyNow">Buy</button> <button class="ghost" id="closeModal">Close</button></div>
+        </div>
+      </div>`);
+    qs('#buyNow').onclick = ()=>{ closeModal(); openBuy(itemId); };
+    qs('#closeModal').onclick = closeModal;
+  });
+}
+
+function openBuy(itemId){
+  if(!currentUser) return showAuthModal();
+  db.collection('items').doc(itemId).get().then(doc=>{
+    if(!doc.exists) return alert('Item not found');
+    const it = doc.data(); it.id = doc.id;
+    if((it.stock||0) <= 0) return alert('Out of stock');
+    openModal(`<h2>Buy "${escapeHtml(it.title)}"</h2>
+      <div>
+        <div class="muted">Price: ${money(it.price||0)}</div>
+        <label>Classroom
+          <select id="classroom" class="input"><option>8-D</option><option>8-C</option></select></label>
+        <label>Pickup time
+          <select id="ptime" class="input"><option>09:00</option><option>10:00</option><option>11:00</option><option>12:00</option><option>13:00</option></select></label>
+        <label>Quantity
+          <input id="qty" type="number" min="1" value="1" class="input" />
+        </label>
+        <div style="display:flex;gap:8px">
+          <button id="confirmBuy" class="btn">Confirm & Buy</button>
+          <button id="cancelBuy" class="ghost">Cancel</button>
+        </div>
+      </div>`);
+    qs('#confirmBuy').onclick = async ()=>{
+      const qty = Math.max(1, Number(qs('#qty').value||1));
+      const classroom = qs('#classroom').value;
+      const ptime = qs('#ptime').value;
+      try{
+        const itemRef = db.collection('items').doc(itemId);
+        await db.runTransaction(async tx=>{
+          const snap = await tx.get(itemRef);
+          if(!snap.exists) throw new Error('Item not found');
+          const data = snap.data();
+          const stock = data.stock || 0;
+          if(stock < qty) throw new Error('Not enough stock');
+          tx.update(itemRef, { stock: stock - qty });
+          const orderRef = db.collection('orders').doc();
+          tx.set(orderRef, {
+            itemId: itemId,
+            itemTitle: data.title || '',
+            buyerId: currentUser.uid,
+            buyerName: currentUser.displayName || currentUser.email,
+            qty,
+            classroom,
+            time: ptime,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          const sellerId = data.ownerId || null;
+          const now = firebase.firestore.FieldValue.serverTimestamp();
+          if(sellerId){
+            const noteRef = db.collection('notifications').doc();
+            tx.set(noteRef, {
+              recipientId: sellerId,
+              title: 'Item sold',
+              text: `Your item "${data.title}" was purchased x${qty} by ${currentUser.displayName || currentUser.email}.`,
+              orderId: orderRef.id,
+              read: false,
+              createdAt: now
+            });
+          }
+          const n2 = db.collection('notifications').doc();
+          tx.set(n2, {
+            recipientId: currentUser.uid,
+            title: 'Purchase confirmed',
+            text: `You bought "${data.title}" x${qty}. Pickup: ${classroom} at ${ptime}.`,
+            orderId: orderRef.id,
+            read: false,
+            createdAt: now
+          });
         });
+        closeModal();
+        alert('Purchase successful — notifications created.');
+      }catch(err){
+        alert('Purchase failed: ' + (err.message || err));
+      }
+    };
+    qs('#cancelBuy').onclick = closeModal;
+  });
+}
 
-        // Event Listeners
-        function setupEventListeners() {
-            // Auth form
-            document.getElementById('authForm').addEventListener('submit', handleAuth);
-            
-            // Logout button
-            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-            
-            // Admin button
-            document.getElementById('adminBtn').addEventListener('click', openAdminPanel);
-            
-            // Tab navigation
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => switchTab(e.target.dataset.tab));
-            });
-            
-            // Search functionality
-            document.getElementById('searchBtn').addEventListener('click', handleSearch);
-            document.getElementById('searchInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') handleSearch();
-            });
-            
-            // Sell form
-            document.getElementById('sellForm').addEventListener('submit', handleSellItem);
-            
-            // Image preview
-            document.getElementById('itemImage').addEventListener('change', previewImage);
-            document.getElementById('editItemImage').addEventListener('change', previewEditImage);
-            
-            // Admin panel
-            document.getElementById('adminStockForm').addEventListener('submit', handleAdminStock);
-            document.getElementById('commentForm').addEventListener('submit', handleComment);
-            
-            // Purchase modal
-            document.getElementById('confirmPurchase').addEventListener('click', confirmPurchase);
-            
-            // Edit form
-            document.getElementById('editForm').addEventListener('submit', handleEditItem);
-        }
+/* -------------------- Create listing (upload to Storage) -------------------- */
+function showSellModal(){
+  if(!currentUser) return showAuthModal();
+  openModal(`<h2>Create Listing</h2>
+    <div>
+      <input id="li_title" class="input" placeholder="Title" />
+      <input id="li_price" class="input" placeholder="Price (numbers only)" />
+      <input id="li_stock" class="input" placeholder="Stock (integer)" />
+      <select id="li_cat" class="input"><option>Pack</option><option>Single</option><option>Accessory</option></select>
+      <textarea id="li_desc" class="input" placeholder="Description"></textarea>
+      <label class="muted-small">Image (optional) <input type="file" id="li_img" accept="image/*" /></label>
+      <div style="display:flex;gap:8px">
+        <button id="createListBtn" class="btn">Create</button>
+        <button id="cancelList" class="ghost">Cancel</button>
+      </div>
+    </div>`);
+  qs('#cancelList').onclick = closeModal;
+  qs('#createListBtn').onclick = async ()=>{
+    const title = qs('#li_title').value.trim() || 'Untitled';
+    const price = parseFloat(qs('#li_price').value) || 0;
+    const stock = parseInt(qs('#li_stock').value) || 1;
+    const cat = qs('#li_cat').value;
+    const desc = qs('#li_desc').value || '';
+    const file = qs('#li_img').files[0];
+    try{
+      const docRef = db.collection('items').doc();
+      let imageURL = '';
+      if(file){
+        const path = `images/${docRef.id}_${Date.now()}_${file.name}`;
+        const snap = await storage.ref().child(path).put(file);
+        imageURL = await snap.ref.getDownloadURL();
+      }
+      await docRef.set({
+        title, price, stock, cat, desc,
+        ownerId: currentUser.uid,
+        ownerName: currentUser.displayName || currentUser.email,
+        imageURL,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      closeModal();
+      alert('Listing created');
+    }catch(e){ alert('Create listing failed: '+e.message); }
+  };
+}
 
-        // Auth functionality
-        function openAuthModal(mode) {
-            currentAuthMode = mode;
-            document.getElementById('authModal').classList.remove('hidden');
-            switchAuthTab(mode);
-        }
+/* -------------------- Notifications (realtime) -------------------- */
+let notesUnsub = null;
+function startNotificationsListener(){
+  if(!currentUser){
+    if(notesUnsub){ notesUnsub(); notesUnsub = null; }
+    renderNotifyArea([]);
+    return;
+  }
+  if(notesUnsub) notesUnsub();
+  notesUnsub = db.collection('notifications')
+    .where('recipientId','==', currentUser.uid)
+    .orderBy('createdAt','desc')
+    .onSnapshot(snapshot=>{
+      const notes = [];
+      snapshot.forEach(doc=>{ const d = doc.data(); d.id = doc.id; notes.push(d); });
+      renderNotifyArea(notes);
+    }, err => console.error(err));
+}
 
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.add('hidden');
-            document.getElementById('authForm').reset();
-        }
+function renderNotifyArea(notes){
+  const unread = (notes || []).filter(n=>!n.read).length;
+  qs('#notifyArea').innerHTML = '';
+  const bell = document.createElement('div');
+  bell.className = 'bell';
+  bell.innerHTML = '&#128276;';
+  if(unread) bell.innerHTML += ` <span class="badge">${unread}</span>`;
+  bell.onclick = ()=> openNotificationsModal(notes || []);
+  qs('#notifyArea').appendChild(bell);
+}
 
-        function switchAuthTab(mode) {
-            currentAuthMode = mode;
-            const tabs = document.querySelectorAll('.auth-tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            if (mode === 'login') {
-                tabs[0].classList.add('active');
-                document.getElementById('authModalTitle').textContent = 'Login';
-                document.getElementById('authSubmitBtn').textContent = 'Login';
-                document.getElementById('confirmPasswordGroup').classList.add('hidden');
-            } else {
-                tabs[1].classList.add('active');
-                document.getElementById('authModalTitle').textContent = 'Sign Up';
-                document.getElementById('authSubmitBtn').textContent = 'Sign Up';
-                document.getElementById('confirmPasswordGroup').classList.remove('hidden');
-            }
-        }
+function openNotificationsModal(notes){
+  if(!currentUser) return showAuthModal();
+  const html = `<h2>Notifications (${(notes||[]).length})</h2>
+    <div style="max-height:50vh;overflow:auto">` + ((notes||[]).length === 0 ? '<div class="muted">No notifications</div>' : notes.map(n=>`
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-weight:700">${escapeHtml(n.title||'Notification')}</div>
+          <div class="muted">${escapeHtml(n.text||'')}</div>
+          <div class="muted" style="font-size:12px">${n.createdAt && n.createdAt.toDate ? n.createdAt.toDate().toLocaleString() : ''}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          ${n.read ? '' : `<button class="btn markRead" data-id="${n.id}">Mark read</button>`}
+          <button class="ghost delNote" data-id="${n.id}">Delete</button>
+        </div>
+      </div>
+    `).join('')) + `</div>
+    <div style="margin-top:8px;display:flex;gap:8px"><button id="closeModal" class="ghost">Close</button><button id="markAll" class="btn">Mark all read</button></div>`;
+  openModal(html);
+  qsa('.markRead').forEach(b => b.onclick = async ()=>{
+    const nid = b.dataset.id;
+    await db.collection('notifications').doc(nid).update({ read: true });
+    startNotificationsListener();
+    openNotificationsModal(notes);
+  });
+  qsa('.delNote').forEach(b => b.onclick = async ()=>{
+    const nid = b.dataset.id;
+    await db.collection('notifications').doc(nid).delete();
+    startNotificationsListener();
+    openNotificationsModal(notes);
+  });
+  qs('#markAll').onclick = async ()=>{
+    const batch = db.batch();
+    (notes||[]).forEach(n=>{ if(!n.read) batch.update(db.collection('notifications').doc(n.id), { read: true }); });
+    await batch.commit();
+    startNotificationsListener();
+    openNotificationsModal(notes);
+  };
+  qs('#closeModal').onclick = closeModal;
+}
 
-        async function handleAuth(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('authUsername').value;
-            const name = document.getElementById('authName').value;
-            const password = document.getElementById('authPassword').value;
-            const confirmPassword = document.getElementById('authConfirmPassword').value;
-            
-            if (currentAuthMode === 'signup') {
-                if (password !== confirmPassword) {
-                    alert('Passwords do not match!');
-                    return;
-                }
-                
-                if (users.find(user => user.username === username)) {
-                    alert('Username already exists!');
-                    return;
-                }
-                
-                users.push({ 
-                    username: username, 
-                    name: name, 
-                    password: password,
-                    isAdmin: password === 'slyrster'
-                });
-                
-                await saveDataToCloud();
-                alert('Account created successfully!');
-                closeAuthModal();
-                
-            } else {
-                const user = users.find(user => user.username === username && user.password === password);
-                
-                if (user) {
-                    currentUser = user;
-                    document.getElementById('authButtons').classList.add('hidden');
-                    document.getElementById('userInfo').classList.remove('hidden');
-                    document.getElementById('currentUserName').textContent = user.name;
-                    
-                    if (user.isAdmin) {
-                        document.getElementById('adminBtn').classList.remove('hidden');
-                    }
-                    
-                    closeAuthModal();
-                    loadMyItems();
-                    updateNotificationBadge();
-                } else {
-                    alert('Invalid username or password!');
-                }
-            }
-        }
+/* -------------------- Account modal -------------------- */
+function showAccountModal(){
+  if(!currentUser) return showAuthModal();
+  db.collection('orders').where('buyerId','==',currentUser.uid).orderBy('createdAt','desc').get().then(snap=>{
+    const orders = [];
+    snap.forEach(doc=>{ const d = doc.data(); d.id = doc.id; orders.push(d); });
+    openModal(`<h2>Account</h2>
+      <div>
+        <div class="muted-small">Name: ${escapeHtml(currentUser.displayName||'')}</div>
+        <div class="muted-small">Email: ${escapeHtml(currentUser.email)}</div>
+        <div style="margin-top:8px"><button id="chgName" class="ghost">Change display name</button> <button id="closeModal" class="ghost">Close</button></div>
+        <h3 style="margin-top:12px">My Orders (${orders.length})</h3>
+        <div style="max-height:40vh;overflow:auto">${orders.length===0?'<div class="muted">No orders</div>': orders.map(o=>`<div class="card">${escapeHtml(o.itemTitle||o.itemId)} x${o.qty} • ${escapeHtml(o.classroom)} @${escapeHtml(o.time)} • ${o.createdAt && o.createdAt.toDate ? o.createdAt.toDate().toLocaleString() : ''}</div>`).join('')}</div>
+      </div>`);
+    qs('#chgName').onclick = changeDisplayName;
+    qs('#closeModal').onclick = closeModal;
+  });
+}
 
-        // Logout functionality
-        function handleLogout() {
-            currentUser = null;
-            document.getElementById('userInfo').classList.add('hidden');
-            document.getElementById('authButtons').classList.remove('hidden');
-            document.getElementById('adminBtn').classList.add('hidden');
-            document.getElementById('authForm').reset();
-        }
+function changeDisplayName(){
+  openModal(`<h2>Change display name</h2><div><input id="newName" class="input" placeholder="New display name" /><div style="display:flex;gap:8px"><button id="doCh" class="btn">Save</button><button id="cancel" class="ghost">Cancel</button></div></div>`);
+  qs('#cancel').onclick = ()=>{ closeModal(); showAccountModal(); };
+  qs('#doCh').onclick = async ()=>{
+    const nm = qs('#newName').value.trim();
+    if(!nm) return alert('Enter a name');
+    await auth.currentUser.updateProfile({ displayName: nm });
+    await db.collection('users').doc(auth.currentUser.uid).set({ name: nm, email: auth.currentUser.email, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+    closeModal();
+    alert('Name updated');
+  };
+}
 
-        // Tab switching
-        function switchTab(tabName) {
-            // Update tab buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-            
-            // Update tab content
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            
-            // Load specific content
-            if (tabName === 'my-items') {
-                loadMyItems();
-            }
-        }
+/* -------------------- Listeners & startup -------------------- */
+qs('#search').oninput = () => { /* rendering handled by snapshot */ };
+qs('#filterCategory').onchange = () => { /* handled by snapshot sorting */ };
+qs('#inStockOnly').onchange = () => { /* handled by snapshot filtering */ };
+qs('#sortBy').onchange = () => { /* handled by snapshot sorting */ };
 
-        // Load items to marketplace
-        async function loadItems() {
-            const grid = document.getElementById('itemsGrid');
-            const loading = document.getElementById('loadingItems');
-            
-            loading.style.display = 'block';
-            grid.innerHTML = '';
-            
-            // Refresh data from cloud
-            await loadDataFromCloud();
-            
-            loading.style.display = 'none';
-            
-            items.forEach(item => {
-                if (item.stock > 0) {
-                    const itemCard = createItemCard(item);
-                    grid.appendChild(itemCard);
-                }
-            });
-        }
+auth.onAuthStateChanged(async u=>{
+  currentUser = u;
+  renderUserArea();
+  if(u){
+    const ud = db.collection('users').doc(u.uid);
+    const snap = await ud.get();
+    if(!snap.exists){
+      await ud.set({ name: u.displayName || '', email: u.email, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+    }
+    startNotificationsListener();
+  } else {
+    startNotificationsListener();
+  }
+});
 
-        // Create item card
-        function createItemCard(item) {
-            const card = document.createElement('div');
-            card.className = 'item-card';
-            
-            const isOwner = currentUser && item.seller === currentUser.username;
-            const actionsHTML = isOwner ? `
-                <div class="item-actions">
-                    <button class="edit-btn" onclick="editItem(${item.id})" title="Edit">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="delete-btn" onclick="deleteItem(${item.id})" title="Delete">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            ` : '';
-            
-            card.innerHTML = `
-                ${actionsHTML}
-                <img src="${item.image}" alt="${item.name}" class="item-image">
-                <div class="item-name">${item.name}</div>
-                <div class="item-description">${item.description}</div>
-                <div class="item-price">$${item.price}</div>
-                <div class="item-stock">Stock: ${item.stock}</div>
-                <div class="item-seller">Seller: ${item.seller}</div>
-                                <button class="buy-btn" ${item.stock === 0 ? 'disabled' : ''} onclick="openPurchaseModal(${item.id})">
-                    ${item.stock === 0 ? 'Out of Stock' : 'Buy Now'}
-                </button>
-            `;
-            return card;
-        }
+/* Start items listener */
+startItemsListener();
 
-        // Edit item
-        function editItem(itemId) {
-            const item = items.find(item => item.id === itemId);
-            if (item) {
-                currentEditItem = item;
-                document.getElementById('editItemName').value = item.name;
-                document.getElementById('editItemDescription').value = item.description;
-                document.getElementById('editItemPrice').value = item.price;
-                document.getElementById('editItemStock').value = item.stock;
-                document.getElementById('editImagePreview').innerHTML = `<img src="${item.image}" alt="Current image">`;
-                document.getElementById('editModal').classList.remove('hidden');
-            }
-        }
+/* Bind sell button */
+qs('#sellBtn').onclick = ()=> showSellModal();
 
-        // Delete item
-        async function deleteItem(itemId) {
-            if (confirm('Are you sure you want to delete this item?')) {
-                const index = items.findIndex(item => item.id === itemId);
-                if (index > -1) {
-                    items.splice(index, 1);
-                    await saveDataToCloud();
-                    loadItems();
-                    loadMyItems();
-                }
-            }
-        }
-
-        // Handle edit form
-        async function handleEditItem(e) {
-            e.preventDefault();
-            
-            if (currentEditItem) {
-                currentEditItem.name = document.getElementById('editItemName').value;
-                currentEditItem.description = document.getElementById('editItemDescription').value;
-                currentEditItem.price = parseInt(document.getElementById('editItemPrice').value);
-                currentEditItem.stock = parseInt(document.getElementById('editItemStock').value);
-                
-                const imageFile = document.getElementById('editItemImage').files[0];
-                if (imageFile) {
-                    const reader = new FileReader();
-                    reader.onload = async function(e) {
-                        currentEditItem.image = e.target.result;
-                        await saveDataToCloud();
-                        loadItems();
-                        loadMyItems();
-                        closeEditModal();
-                    };
-                    reader.readAsDataURL(imageFile);
-                } else {
-                    await saveDataToCloud();
-                    loadItems();
-                    loadMyItems();
-                    closeEditModal();
-                }
-            }
-        }
-
-        // Close edit modal
-        function closeEditModal() {
-            document.getElementById('editModal').classList.add('hidden');
-            currentEditItem = null;
-        }
-
-        // Preview edit image
-        function previewEditImage(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('editImagePreview').innerHTML = `<img src="${e.target.result}" alt="Preview">`;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Search functionality
-        function handleSearch() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const grid = document.getElementById('itemsGrid');
-            grid.innerHTML = '';
-            
-            const filteredItems = items.filter(item => 
-                item.name.toLowerCase().includes(searchTerm) ||
-                item.description.toLowerCase().includes(searchTerm)
-            );
-            
-            filteredItems.forEach(item => {
-                if (item.stock > 0) {
-                    const itemCard = createItemCard(item);
-                    grid.appendChild(itemCard);
-                }
-            });
-        }
-
-        // Sell item functionality
-        async function handleSellItem(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('itemName').value;
-            const description = document.getElementById('itemDescription').value;
-            const price = parseInt(document.getElementById('itemPrice').value);
-            const stock = parseInt(document.getElementById('itemStock').value);
-            const imageFile = document.getElementById('itemImage').files[0];
-            
-            let imageData = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNjY3ZWVhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5DdXN0b20gSXRlbTwvdGV4dD48L3N2Zz4=";
-            
-            if (imageFile) {
-                const reader = new FileReader();
-                reader.onload = async function(e) {
-                    imageData = e.target.result;
-                    await addNewItem(name, description, price, stock, imageData);
-                };
-                reader.readAsDataURL(imageFile);
-            } else {
-                await addNewItem(name, description, price, stock, imageData);
-            }
-        }
-
-        // Add new item
-        async function addNewItem(name, description, price, stock, image) {
-            const newItem = {
-                id: Date.now(),
-                name: name,
-                description: description,
-                price: price,
-                stock: stock,
-                image: image,
-                seller: currentUser.username
-            };
-            
-            items.push(newItem);
-            await saveDataToCloud();
-            loadItems();
-            
-            // Clear form
-            document.getElementById('sellForm').reset();
-            document.getElementById('imagePreview').innerHTML = '';
-            
-            alert('Item listed successfully!');
-        }
-
-        // Image preview
-        function previewImage(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('imagePreview').innerHTML = `<img src="${e.target.result}" alt="Preview">`;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Load user's items
-        async function loadMyItems() {
-            const grid = document.getElementById('myItemsGrid');
-            const loading = document.getElementById('loadingMyItems');
-            
-            loading.style.display = 'block';
-            grid.innerHTML = '';
-            
-            // Refresh data from cloud
-            await loadDataFromCloud();
-            
-            loading.style.display = 'none';
-            
-            const userItems = items.filter(item => item.seller === currentUser.username);
-            
-            if (userItems.length === 0) {
-                grid.innerHTML = '<p style="text-align: center; color: #888;">You haven\'t listed any items yet.</p>';
-                return;
-            }
-            
-            userItems.forEach(item => {
-                const itemCard = createItemCard(item);
-                grid.appendChild(itemCard);
-            });
-        }
-
-        // Notifications functionality
-        async function addNotification(title, message, recipient) {
-            const notification = {
-                id: Date.now(),
-                title: title,
-                message: message,
-                recipient: recipient,
-                timestamp: new Date(),
-                read: false
-            };
-            
-            notifications.push(notification);
-            await saveDataToCloud();
-            
-            if (currentUser && currentUser.username === recipient) {
-                updateNotificationBadge();
-            }
-        }
-
-        function updateNotificationBadge() {
-            if (!currentUser) return;
-            
-            const unreadCount = notifications.filter(notif => 
-                notif.recipient === currentUser.username && !notif.read
-            ).length;
-            
-            const badge = document.getElementById('notificationBadge');
-            if (unreadCount > 0) {
-                badge.textContent = unreadCount;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
-        }
-
-        function openNotifications() {
-            document.getElementById('notificationsModal').classList.remove('hidden');
-            loadNotifications();
-        }
-
-        function closeNotifications() {
-            document.getElementById('notificationsModal').classList.add('hidden');
-        }
-
-        async function loadNotifications() {
-            if (!currentUser) return;
-            
-            // Refresh data from cloud
-            await loadDataFromCloud();
-            
-            const userNotifications = notifications
-                .filter(notif => notif.recipient === currentUser.username)
-                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            
-            const list = document.getElementById('notificationsList');
-            list.innerHTML = '';
-            
-            if (userNotifications.length === 0) {
-                list.innerHTML = '<p style="text-align: center; color: #888;">No notifications yet.</p>';
-                return;
-            }
-            
-            userNotifications.forEach(notification => {
-                const notificationDiv = document.createElement('div');
-                notificationDiv.className = `notification-item ${notification.read ? '' : 'unread'}`;
-                notificationDiv.innerHTML = `
-                    <div class="notification-title">${notification.title}</div>
-                    <div class="notification-message">${notification.message}</div>
-                    <div class="notification-time">${new Date(notification.timestamp).toLocaleString()}</div>
-                `;
-                
-                notificationDiv.addEventListener('click', async () => {
-                    notification.read = true;
-                    await saveDataToCloud();
-                    updateNotificationBadge();
-                    loadNotifications();
-                });
-                
-                list.appendChild(notificationDiv);
-            });
-        }
-
-        // Admin panel functionality
-        function openAdminPanel() {
-            document.getElementById('adminModal').classList.remove('hidden');
-            loadComments();
-        }
-
-        function closeAdminPanel() {
-            document.getElementById('adminModal').classList.add('hidden');
-        }
-
-        async function handleAdminStock(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('adminItemName').value;
-            const stock = parseInt(document.getElementById('adminStock').value);
-            const imageFile = document.getElementById('adminItemImage').files[0];
-            
-            let imageData = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZmY2YjZiIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5BZG1pbiBQYWNrPC90ZXh0Pjwvc3ZnPg==";
-            
-            if (imageFile) {
-                const reader = new FileReader();
-                reader.onload = async function(e) {
-                    imageData = e.target.result;
-                    await addAdminStock(name, stock, imageData);
-                };
-                reader.readAsDataURL(imageFile);
-            } else {
-                await addAdminStock(name, stock, imageData);
-            }
-        }
-
-        async function addAdminStock(name, stock, image) {
-            const newItem = {
-                id: Date.now(),
-                name: name,
-                description: "Random card pack with 10 stocks - Admin generated",
-                price: Math.floor(Math.random() * 20) + 10,
-                stock: stock,
-                image: image,
-                seller: "admin"
-            };
-            
-            items.push(newItem);
-            await saveDataToCloud();
-            loadItems();
-            
-            // Clear form
-            document.getElementById('adminStockForm').reset();
-            
-            alert('Stock item added successfully!');
-        }
-
-        // Comments functionality
-        async function loadComments() {
-            // Refresh data from cloud
-            await loadDataFromCloud();
-            
-            const section = document.getElementById('commentsSection');
-            section.innerHTML = '';
-            
-            if (comments.length === 0) {
-                section.innerHTML = '<p style="color: #888;">No comments yet.</p>';
-                return;
-            }
-            
-            comments.forEach(comment => {
-                const commentDiv = document.createElement('div');
-                commentDiv.className = 'comment';
-                commentDiv.innerHTML = `
-                    <div class="comment-author">${comment.author}</div>
-                    <div class="comment-text">${comment.text}</div>
-                `;
-                section.appendChild(commentDiv);
-            });
-        }
-
-        async function handleComment(e) {
-            e.preventDefault();
-            
-            const text = document.getElementById('newComment').value;
-            if (text.trim()) {
-                const comment = {
-                    id: Date.now(),
-                    author: currentUser.name,
-                    text: text,
-                    timestamp: new Date()
-                };
-                
-                comments.push(comment);
-                await saveDataToCloud();
-                loadComments();
-                document.getElementById('newComment').value = '';
-            }
-        }
-
-        // Purchase functionality
-        function openPurchaseModal(itemId) {
-            if (!currentUser) {
-                alert('Please login first to purchase items!');
-                return;
-            }
-            
-            currentPurchaseItem = items.find(item => item.id === itemId);
-            document.getElementById('purchaseModal').classList.remove('hidden');
-        }
-
-        function closePurchaseModal() {
-            document.getElementById('purchaseModal').classList.add('hidden');
-            currentPurchaseItem = null;
-        }
-
-        async function confirmPurchase() {
-            const classroom = document.querySelector('input[name="classroom"]:checked');
-            const time = document.getElementById('timeSelect').value;
-            
-            if (!classroom) {
-                alert('Please select a classroom!');
-                return;
-            }
-            
-            if (currentPurchaseItem && currentPurchaseItem.stock > 0) {
-                currentPurchaseItem.stock--;
-                
-                // Add notification to seller
-                if (currentPurchaseItem.seller !== currentUser.username) {
-                    await addNotification(
-                        'Item Sold!',
-                        `${currentUser.name} purchased "${currentPurchaseItem.name}" for $${currentPurchaseItem.price}. Delivery to ${classroom.value} at ${time}.`,
-                        currentPurchaseItem.seller
-                    );
-                }
-                
-                if (currentPurchaseItem.stock === 0) {
-                    // Remove item if stock is 0
-                    const index = items.findIndex(item => item.id === currentPurchaseItem.id);
-                    if (index > -1) {
-                        items.splice(index, 1);
-                    }
-                }
-                
-                await saveDataToCloud();
-                loadItems();
-                closePurchaseModal();
-                
-                alert(`Purchase confirmed! Your item will be delivered to ${classroom.value} at ${time}.`);
-            }
-        }
-
-        // Auto-refresh data every 30 seconds
-        setInterval(async () => {
-            if (currentUser) {
-                await loadDataFromCloud();
-                loadItems();
-                if (document.getElementById('my-items').classList.contains('active')) {
-                    loadMyItems();
-                }
-                updateNotificationBadge();
-            }
-        }, 30000);
-    </script>
+/* small helper to log */
+console.log('CardVerse v4 loaded — Firebase project:', firebaseConfig.projectId);
+</script>
 </body>
 </html>
-                
