@@ -425,49 +425,74 @@ function openBuy(itemId){
 }
 
 /* -------------------- Create listing (upload to Storage) -------------------- */
-function showSellModal(){
-  if(!currentUser) return showAuthModal();
-  openModal(`<h2>Create Listing</h2>
+/* -------------------- Create listing (upload to Storage) -------------------- */
+function showSellModal() {
+  if (!currentUser) return showAuthModal();
+  openModal(`
+    <h2>Create Listing</h2>
     <div>
       <input id="li_title" class="input" placeholder="Title" />
       <input id="li_price" class="input" placeholder="Price (numbers only)" />
       <input id="li_stock" class="input" placeholder="Stock (integer)" />
-      <select id="li_cat" class="input"><option>Pack</option><option>Single</option><option>Accessory</option></select>
+      <select id="li_cat" class="input">
+        <option>Pack</option>
+        <option>Single</option>
+        <option>Accessory</option>
+      </select>
       <textarea id="li_desc" class="input" placeholder="Description"></textarea>
-      <label class="muted-small">Image (optional) <input type="file" id="li_img" accept="image/*" /></label>
+      <label class="muted-small">
+        Image (optional)
+        <input type="file" id="li_img" accept="image/*" />
+      </label>
       <div style="display:flex;gap:8px">
         <button id="createListBtn" class="btn">Create</button>
         <button id="cancelList" class="ghost">Cancel</button>
       </div>
-    </div>`);
+    </div>
+  `);
+
   qs('#cancelList').onclick = closeModal;
-  qs('#createListBtn').onclick = async ()=>{
+
+  qs('#createListBtn').onclick = async () => {
     const title = qs('#li_title').value.trim() || 'Untitled';
     const price = parseFloat(qs('#li_price').value) || 0;
     const stock = parseInt(qs('#li_stock').value) || 1;
     const cat = qs('#li_cat').value;
     const desc = qs('#li_desc').value || '';
     const file = qs('#li_img').files[0];
-    try{
+
+    try {
       const docRef = db.collection('items').doc();
       let imageURL = '';
-      if(file){
-        const path = `images/${docRef.id}_${Date.now()}_${file.name}`;
-        const snap = await storage.ref().child(path).put(file);
-        imageURL = await snap.ref.getDownloadURL();
+
+      if (file) {
+        const safeName = file.name.replace(/[^\w.-]+/g, '_');
+        const path = `images/${docRef.id}_${Date.now()}_${safeName}`;
+        const storageRef = storage.ref(path);
+        const uploadTask = await storageRef.put(file);
+        imageURL = await uploadTask.ref.getDownloadURL();
       }
+
       await docRef.set({
-        title, price, stock, cat, desc,
+        title,
+        price,
+        stock,
+        cat,
+        desc,
         ownerId: currentUser.uid,
         ownerName: currentUser.displayName || currentUser.email,
         imageURL,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
+
       closeModal();
-      alert('Listing created');
-    }catch(e){ alert('Create listing failed: '+e.message); }
+      alert('Listing created successfully!');
+    } catch (e) {
+      alert('Create listing failed: ' + e.message);
+    }
   };
 }
+
 
 /* -------------------- Notifications (realtime) -------------------- */
 let notesUnsub = null;
