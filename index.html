@@ -13,314 +13,37 @@
   --muted:#9b91b3;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
-html,body{
-  height:100%;
-  margin:0;
-  background:linear-gradient(180deg,#0d0320 0%, #12062a 60%);
-  color:var(--panel);
-  -webkit-font-smoothing:antialiased
-}
-.container{
-  max-width:1100px;
-  margin:28px auto;
-  padding:20px
-}
-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:18px
-}
-.logo{
-  display:flex;
-  align-items:center;
-  gap:12px
-}
-.mark{
-  width:56px;
-  height:56px;
-  border-radius:12px;
-  background:linear-gradient(135deg,var(--accent),var(--accent-2));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-  box-shadow:0 8px 30px rgba(122,60,255,0.18)
-}
-.searchbar{
-  flex:1;
-  margin-left:14px
-}
-.searchbar input{
-  width:100%;
-  padding:12px 16px;
-  border-radius:12px;
-  border:none;
-  outline:none;
-  background:rgba(255,255,255,0.04);
-  color:var(--panel);
-  font-size:15px
-}
-.top-actions{
-  display:flex;
-  gap:8px;
-  align-items:center
-}
-button.btn{
-  background:linear-gradient(90deg,var(--accent),var(--accent-2));
-  border:none;
-  padding:10px 14px;
-  border-radius:10px;
-  color:white;
-  font-weight:600;
-  cursor:pointer;
-  box-shadow:0 8px 20px rgba(122,60,255,0.12);
-  transition:transform 0.2s, box-shadow 0.2s
-}
-button.btn:hover{
-  transform:translateY(-1px);
-  box-shadow:0 12px 25px rgba(122,60,255,0.2)
-}
-button.ghost{
-  background:transparent;
-  border:1px solid rgba(255,255,255,0.05);
-  color:var(--panel);
-  padding:8px 12px;
-  border-radius:10px;
-  cursor:pointer;
-  transition:background 0.2s
-}
-button.ghost:hover{
-  background:rgba(255,255,255,0.05)
-}
-.smallbtn{
-  padding:6px 8px;
-  font-size:13px
-}
-main{
-  display:grid;
-  grid-template-columns:330px 1fr;
-  gap:20px
-}
-.sidebar{
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  padding:16px;
-  border-radius:14px;
-  box-shadow:0 8px 30px rgba(2,2,2,0.4)
-}
-.card{
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  padding:14px;
-  border-radius:12px;
-  margin-bottom:12px
-}
-.product-list{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
-  gap:14px
-}
-.product{
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  padding:12px;
-  border-radius:12px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  transition:transform 0.2s, box-shadow 0.2s
-}
-.product:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 20px rgba(122,60,255,0.15)
-}
-.meta{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:13px;
-  color:var(--muted)
-}
-.tag{
-  padding:6px 8px;
-  border-radius:8px;
-  background:rgba(255,255,255,0.03);
-  font-size:12px
-}
-.buy-row{
-  display:flex;
-  gap:8px;
-  align-items:center
-}
-.muted{
-  color:var(--muted)
-}
-.modal-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(3,2,10,0.8);
-  backdrop-filter:blur(4px);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:40;
-  animation:fadeIn 0.2s
-}
-@keyframes fadeIn{
-  from{opacity:0}
-  to{opacity:1}
-}
-.modal{
-  width:560px;
-  max-width:90vw;
-  max-height:80vh;
-  overflow-y:auto;
-  background:linear-gradient(180deg,#12051f,#0b0416);
-  border-radius:12px;
-  padding:18px;
-  color:var(--panel);
-  box-shadow:0 20px 80px rgba(0,0,0,0.6);
-  animation:slideUp 0.3s
-}
-@keyframes slideUp{
-  from{transform:translateY(20px);opacity:0}
-  to{transform:translateY(0);opacity:1}
-}
-.input,textarea,select{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:none;
-  background:rgba(255,255,255,0.03);
-  color:var(--panel);
-  outline:none;
-  margin-bottom:8px;
-  box-sizing:border-box
-}
-.badge{
-  background:#ff3b7a;
-  color:white;
-  padding:2px 6px;
-  border-radius:999px;
-  font-size:12px;
-  margin-left:6px
-}
-.bell{
-  position:relative;
-  padding:8px;
-  border-radius:8px;
-  background:rgba(255,255,255,0.02);
-  border:1px solid rgba(255,255,255,0.03);
-  cursor:pointer;
-  transition:background 0.2s, transform 0.2s
-}
-.bell:hover{
-  background:rgba(255,255,255,0.05);
-  transform:scale(1.05)
-}
-.bell-count{
-  position:absolute;
-  top:-4px;
-  right:-4px;
-  background:#ff3b7a;
-  color:white;
-  padding:2px 6px;
-  border-radius:999px;
-  font-size:11px;
-  font-weight:700;
-  min-width:18px;
-  text-align:center;
-  animation:pulse 2s infinite
-}
-@keyframes pulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.1)}
-}
-.notif-item{
-  background:rgba(255,255,255,0.03);
-  padding:12px;
-  border-radius:8px;
-  margin-bottom:8px;
-  border-left:3px solid var(--accent);
-  transition:background 0.2s
-}
-.notif-item:hover{
-  background:rgba(255,255,255,0.05)
-}
-.notif-time{
-  font-size:11px;
-  color:var(--muted);
-  margin-top:4px
-}
-.notif-text{
-  font-size:14px;
-  line-height:1.4
-}
-.empty-notif{
-  text-align:center;
-  padding:40px 20px;
-  color:var(--muted)
-}
-footer{
-  margin-top:18px;
-  text-align:center;
-  color:var(--muted);
-  font-size:13px
-}
-.row{
-  display:flex;
-  gap:8px;
-  align-items:center
-}
-.muted-small{
-  font-size:13px;
-  color:var(--muted)
-}
-.googleBtn{
-  background:linear-gradient(90deg,#ffffff,#f1f1f1);
-  color:#111;
-  border-radius:10px;
-  padding:8px 12px;
-  font-weight:700;
-  border:none;
-  cursor:pointer;
-  transition:transform 0.2s
-}
-.googleBtn:hover{
-  transform:translateY(-1px)
-}
-.delete-notif{
-  background:#ff3b7a;
-  color:white;
-  border:none;
-  padding:4px 8px;
-  border-radius:6px;
-  font-size:11px;
-  cursor:pointer;
-  float:right;
-  transition:opacity 0.2s
-}
-.delete-notif:hover{
-  opacity:0.8
-}
-.clear-all-notif{
-  background:rgba(255,59,122,0.1);
-  color:#ff3b7a;
-  border:1px solid rgba(255,59,122,0.3);
-  padding:6px 12px;
-  border-radius:8px;
-  font-size:12px;
-  cursor:pointer;
-  margin-top:8px;
-  transition:all 0.2s
-}
-.clear-all-notif:hover{
-  background:rgba(255,59,122,0.2);
-  border-color:rgba(255,59,122,0.5)
-}
-@media (max-width:900px){
-  main{grid-template-columns:1fr}
-  .searchbar{order:3}
-}
+html,body{height:100%;margin:0;background:linear-gradient(180deg,#0d0320 0%, #12062a 60%);color:var(--panel);-webkit-font-smoothing:antialiased}
+.container{max-width:1100px;margin:28px auto;padding:20px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.logo{display:flex;align-items:center;gap:12px}
+.mark{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:0 8px 30px rgba(122,60,255,0.18)}
+.searchbar{flex:1;margin-left:14px}
+.searchbar input{width:100%;padding:12px 16px;border-radius:12px;border:none;outline:none;background:rgba(255,255,255,0.04);color:var(--panel);font-size:15px}
+.top-actions{display:flex;gap:8px;align-items:center}
+button.btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:none;padding:10px 14px;border-radius:10px;color:white;font-weight:600;cursor:pointer;box-shadow:0 8px 20px rgba(122,60,255,0.12)}
+button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.05);color:var(--panel);padding:8px 12px;border-radius:10px}
+.smallbtn{padding:6px 8px;font-size:13px}
+main{display:grid;grid-template-columns:330px 1fr;gap:20px}
+.sidebar{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:14px;box-shadow:0 8px 30px rgba(2,2,2,0.4)}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;margin-bottom:12px}
+.product-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.product{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px;display:flex;flex-direction:column;gap:10px}
+.meta{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}
+.tag{padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.03);font-size:12px}
+.buy-row{display:flex;gap:8px;align-items:center}
+.muted{color:var(--muted)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(3,2,10,0.6);display:none;align-items:center;justify-content:center;z-index:40}
+.modal{width:560px;background:linear-gradient(180deg,#12051f,#0b0416);border-radius:12px;padding:18px;color:var(--panel);box-shadow:0 20px 80px rgba(0,0,0,0.6)}
+.input,textarea,select{width:100%;padding:10px;border-radius:10px;border:none;background:rgba(255,255,255,0.03);color:var(--panel);outline:none;margin-bottom:8px}
+.badge{background:#ff3b7a;color:white;padding:2px 6px;border-radius:999px;font-size:12px;margin-left:6px}
+.bell{position:relative;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+.bell-count{position:absolute;top:-4px;right:-4px;background:#ff3b7a;color:white;padding:2px 6px;border-radius:999px;font-size:12px}
+footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+.row{display:flex;gap:8px;align-items:center}
+.muted-small{font-size:13px;color:var(--muted)}
+.googleBtn{background:linear-gradient(90deg,#ffffff,#f1f1f1);color:#111;border-radius:10px;padding:8px 12px;font-weight:700}
+@media (max-width:900px){main{grid-template-columns:1fr} .searchbar{order:3}}
 </style>
 </head>
 <body>
@@ -338,9 +61,7 @@ footer{
 </div>
 <div class="top-actions">
 <div id="userArea"></div>
-<div id="notifyArea">
-<div class="bell" id="bell">🔔<span id="bellCount" class="bell-count" style="display:none">0</span></div>
-</div>
+<div id="notifyArea"><div class="bell" id="bell">🔔<span id="bellCount" class="bell-count" style="display:none">0</span></div></div>
 <button id="signinBtn" class="ghost">Sign in</button>
 </div>
 </header>
@@ -387,7 +108,7 @@ footer{
 <div class="muted" id="productCount">0 items</div>
 </div>
 <div id="products" class="product-list"></div>
-<footer>Made with ♥ — Rüzly Card Shop v4.1</footer>
+<footer>Made with ♥ —Rüzly Card Shop 4v </footer>
 </section>
 </main>
 </div>
@@ -396,441 +117,300 @@ footer{
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 <script>
-// ============================================
-// FIREBASE CONFIGURATION
-// ============================================
 const firebaseConfig = {
-  apiKey:"AIzaSyDzGTlPWmfz9gg-0EYvvNjZr0dJahTcMrg",
-  authDomain:"ruzly-7af10.firebaseapp.com",
-  projectId:"ruzly-7af10",
-  storageBucket:"ruzly-7af10.appspot.com",
-  messagingSenderId:"223649665023",
-  appId:"1:223649665023:web:c963b16cf626c5184d61ca",
-  measurementId:"G-X4NKTW89XH"
+apiKey:"AIzaSyDzGTlPWmfz9gg-0EYvvNjZr0dJahTcMrg",
+authDomain:"ruzly-7af10.firebaseapp.com",
+projectId:"ruzly-7af10",
+storageBucket:"ruzly-7af10.appspot.com",
+messagingSenderId:"223649665023",
+appId:"1:223649665023:web:c963b16cf626c5184d61ca",
+measurementId:"G-X4NKTW89XH"
 };
-
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+const auth=firebase.auth();
+const db=firebase.firestore();
+let currentUser=null;
+const qs=s=>document.querySelector(s);
+const qsa=s=>document.querySelectorAll(s);
+function id(){return 'i'+Math.random().toString(36).slice(2,9);}
+function money(n){return '₺'+Number(n||0).toFixed(2);}
+function escapeHtml(str){return String(str||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#39;");}
+function openModal(html){qs('#modalContent').innerHTML=html;qs('#modalBack').style.display='flex';}
+function closeModal(){qs('#modalBack').style.display='none';qs('#modalContent').innerHTML='';}
 
-// ============================================
-// GLOBAL STATE
-// ============================================
-let currentUser = null;
-let notifUnsub = null;
-let notificationsCache = [];
-
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
-const qs = s => document.querySelector(s);
-const qsa = s => document.querySelectorAll(s);
-
-function id() {
-  return 'i' + Math.random().toString(36).slice(2, 9);
+/* AUTH */
+function showAuthModal(){
+openModal(`<h2 style="margin-top:0">Sign in / Register</h2>
+<div style="display:flex;gap:8px;margin-bottom:10px">
+<button id="tabSign" class="smallbtn ghost">Sign in</button>
+<button id="tabReg" class="smallbtn ghost">Register</button>
+<div style="flex:1"></div>
+<button id="closeModal" class="ghost">Close</button>
+</div>
+<div id="authBody"></div>
+<div class="muted-small" style="margin-top:6px">Or use Google for one-click sign-in.</div>
+`);
+qs('#tabSign').onclick=()=>renderSignForm();
+qs('#tabReg').onclick=()=>renderRegForm();
+qs('#closeModal').onclick=closeModal;
+renderSignForm();
+}
+function renderSignForm(){
+qs('#authBody').innerHTML=`
+<input id="si_email" class="input" placeholder="Email" />
+<input id="si_pass" class="input" placeholder="Password" type="password" />
+<div style="display:flex;gap:8px">
+<button id="doSign" class="btn">Sign in</button>
+<button id="doGoogle1" class="googleBtn">Sign in with Google</button>
+</div>
+<div id="authMsg" class="muted-small" style="margin-top:6px"></div>
+`;
+qs('#doSign').onclick=async()=>{
+const email=qs('#si_email').value.trim();
+const pass=qs('#si_pass').value;
+if(!validateEmail(email)){qs('#authMsg').textContent='Enter a valid email.';return;}
+if(!pass||pass.length<6){qs('#authMsg').textContent='Password required (min 6 chars).';return;}
+try{await auth.signInWithEmailAndPassword(email,pass);closeModal();}
+catch(e){qs('#authMsg').textContent='Sign in failed: '+e.message;}
+};
+qs('#doGoogle1').onclick=googleSignIn;
+}
+function renderRegForm(){
+qs('#authBody').innerHTML=`
+<input id="r_name" class="input" placeholder="Display name" />
+<input id="r_email" class="input" placeholder="Email" />
+<input id="r_pass" class="input" placeholder="Password (min 6)" type="password" />
+<div style="display:flex;gap:8px">
+<button id="doReg" class="btn">Register</button>
+<button id="doGoogle2" class="googleBtn">Register with Google</button>
+</div>
+<div id="authMsg" class="muted-small" style="margin-top:6px"></div>
+`;
+qs('#doReg').onclick=async()=>{
+const name=qs('#r_name').value.trim();
+const email=qs('#r_email').value.trim();
+const pass=qs('#r_pass').value;
+if(!name){qs('#authMsg').textContent='Enter display name.';return;}
+if(!validateEmail(email)){qs('#authMsg').textContent='Enter a valid email.';return;}
+if(!pass||pass.length<6){qs('#authMsg').textContent='Password must be at least 6 characters.';return;}
+try{
+const cred=await auth.createUserWithEmailAndPassword(email,pass);
+await cred.user.updateProfile({displayName:name});
+await db.collection('users').doc(cred.user.uid).set({name:name,email:email,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+closeModal();
+}catch(e){qs('#authMsg').textContent='Registration failed: '+e.message;}
+};
+qs('#doGoogle2').onclick=googleSignIn;
+}
+function validateEmail(e){return !!e&&/\S+@\S+\.\S+/.test(e);}
+async function googleSignIn(){
+const provider=new firebase.auth.GoogleAuthProvider();
+try{
+const result=await auth.signInWithPopup(provider);
+const u=result.user;
+const doc=await db.collection('users').doc(u.uid).get();
+if(!doc.exists){await db.collection('users').doc(u.uid).set({name:u.displayName||'',email:u.email,createdAt:firebase.firestore.FieldValue.serverTimestamp()});}
+closeModal();
+}catch(e){alert('Google sign-in failed: '+e.message);}
 }
 
-function money(n) {
-  return '₺' + Number(n || 0).toFixed(2);
+/* USER AREA */
+function renderUserArea(){
+if(currentUser){
+qs('#userArea').innerHTML=`<div style="display:flex;gap:10px;align-items:center">
+<div style="font-weight:700">${escapeHtml(currentUser.displayName||currentUser.email)}</div>
+<button id="acctBtn" class="ghost">Account</button>
+</div>`;
+qs('#signinBtn').textContent='Sign out';
+qs('#signinBtn').onclick=()=>auth.signOut();
+qs('#sellBtn').onclick=showSellModal;
+qs('#acctBtn').onclick=showAccountModal;
+listenNotifications();
+}else{
+qs('#userArea').innerHTML='';
+qs('#signinBtn').textContent='Sign in';
+qs('#signinBtn').onclick=showAuthModal;
+qs('#sellBtn').onclick=showAuthModal;
+qs('#bellCount').style.display='none';
+if(notifUnsub)notifUnsub();
+}
 }
 
-function escapeHtml(str) {
-  return String(str || '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", "&#39;");
+/* NOTIFICATIONS */
+let notifUnsub=null;
+function listenNotifications(){
+if(notifUnsub)notifUnsub();
+notifUnsub=db.collection('notifications').where('userId','==',currentUser.uid).orderBy('createdAt','desc').limit(50)
+.onSnapshot(snapshot=>{
+const count=snapshot.docs.length;
+const bellCountEl=qs('#bellCount');
+if(count>0){bellCountEl.style.display='inline-block';bellCountEl.textContent=count;}else{bellCountEl.style.display='none';}
+qs('#bell').onclick=()=>{openModal(`<h2>Notifications</h2><div>${snapshot.docs.map(d=>'<div>'+escapeHtml(d.data().msg)+'</div>').join('')}</div><button class="ghost" onclick="closeModal()">Close</button>`);}
+});
 }
 
-function openModal(html) {
-  qs('#modalContent').innerHTML = html;
-  qs('#modalBack').style.display = 'flex';
+/* PRODUCTS & BUY FLOW */
+const productsEl=qs('#products');
+const productCountEl=qs('#productCount');
+let itemsUnsub=null;
+function startItemsListener(){
+if(itemsUnsub)itemsUnsub();
+itemsUnsub=db.collection('items').orderBy('createdAt','desc').onSnapshot(snapshot=>{
+const arr=[];snapshot.forEach(doc=>{const d=doc.data();d.id=doc.id;arr.push(d);});
+renderProducts(arr);
+},err=>console.error(err));
+}
+function renderProducts(items){
+const q=qs('#search').value.toLowerCase();
+const cat=qs('#filterCategory').value;
+const inStockOnly=qs('#inStockOnly').checked;
+const sortBy=qs('#sortBy').value;
+let filtered=items.slice();
+if(q)filtered=filtered.filter(it=>(it.title+(it.desc||'')+(it.ownerName||'')).toLowerCase().includes(q));
+if(cat)filtered=filtered.filter(it=>it.cat===cat);
+if(inStockOnly)filtered=filtered.filter(it=>(it.stock||0)>0);
+if(sortBy==='price_asc')filtered.sort((a,b)=>(a.price||0)-(b.price||0));
+if(sortBy==='price_desc')filtered.sort((a,b)=>(b.price||0)-(a.price||0));
+productCountEl.textContent=`${filtered.length} items`;
+productsEl.innerHTML='';
+if(filtered.length===0){productsEl.innerHTML=`<div class="muted">No products found.</div>`;return;}
+filtered.forEach(it=>{
+const owner=it.ownerName||'Seller';
+const div=document.createElement('div');
+div.className='product';
+let extra='';
+if(currentUser&&currentUser.uid===it.ownerId)extra=`<button class="ghost editBtn" data-id="${it.id}">Edit</button>`;
+div.innerHTML=`
+<h3>${escapeHtml(it.title)}</h3>
+<div class="meta"><div class="muted">${escapeHtml(it.desc||'')}</div><div class="tag">${escapeHtml(it.cat||'')}</div></div>
+<div class="meta"><div class="muted">${money(it.price||0)}</div><div class="muted">${(it.stock||0)} left</div></div>
+<div class="meta"><div class="muted">Seller: ${escapeHtml(owner)}</div><div class="muted">ID:${escapeHtml(it.id)}</div></div>
+<div class="buy-row">
+<button class="btn buyBtn" data-id="${escapeHtml(it.id)}">Buy</button>
+<button class="ghost viewBtn" data-id="${escapeHtml(it.id)}">View</button>
+${extra}
+</div>
+`;
+productsEl.appendChild(div);
+});
+qsa('.buyBtn').forEach(b=>b.onclick=()=>openBuyModal(b.dataset.id));
+qsa('.editBtn').forEach(b=>b.onclick=()=>openEditItem(b.dataset.id));
+qsa('.viewBtn').forEach(b=>b.onclick=()=>openViewItem(b.dataset.id));
 }
 
-function closeModal() {
-  qs('#modalBack').style.display = 'none';
-  qs('#modalContent').innerHTML = '';
+/* BUY MODAL */
+function openBuyModal(itemId){
+db.collection('items').doc(itemId).get().then(doc=>{
+if(!doc.exists)return alert('Item not found');
+const it=doc.data();it.id=doc.id;
+if((it.stock||0)<=0)return alert('Out of stock');
+openModal(`<h2>Buy ${escapeHtml(it.title)}</h2>
+<div class="muted-small">Price: ${money(it.price||0)}</div>
+<div class="muted-small">Stock: ${it.stock||0}</div>
+<label>Quantity <input type="number" id="buyQty" value="1" min="1" max="${it.stock||1}" class="input"/></label>
+<button class="btn" id="confirmBuy">Confirm Purchase</button>
+<button class="ghost" id="closeModal">Cancel</button>
+`);
+qs('#confirmBuy').onclick=async()=>{
+const qty=Math.min(parseInt(qs('#buyQty').value)||1,it.stock||1);
+try{
+await db.collection('items').doc(itemId).update({stock:(it.stock||0)-qty});
+await db.collection('notifications').add({userId:it.ownerId,msg:`${currentUser.displayName||currentUser.email} bought ${qty}x ${it.title}`,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+alert('Purchase successful!');
+closeModal();
+}catch(e){alert('Error: '+e.message);}
+};
+qs('#closeModal').onclick=closeModal;
+});
 }
 
-function timeAgo(timestamp) {
-  if (!timestamp) return 'Just now';
-  const now = Date.now();
-  const then = timestamp.toMillis ? timestamp.toMillis() : timestamp;
-  const diff = Math.floor((now - then) / 1000);
-  
-  if (diff < 60) return 'Just now';
-  if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
-  if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
-  return Math.floor(diff / 86400) + 'd ago';
+/* SELL */
+function showSellModal(){
+if(!currentUser)return showAuthModal();
+openModal(`<h2>Create Listing</h2>
+<input id="sellTitle" class="input" placeholder="Title"/>
+<textarea id="sellDesc" class="input" placeholder="Description"></textarea>
+<input id="sellPrice" class="input" placeholder="Price"/>
+<input id="sellStock" class="input" placeholder="Stock"/>
+<select id="sellCat" class="input"><option>Pack</option><option>Single</option><option>Accessory</option></select>
+<div style="display:flex;gap:8px">
+<button class="btn" id="createSell">List Item</button>
+<button class="ghost" id="closeModal">Cancel</button>
+</div>
+<div id="sellMsg" class="muted-small"></div>
+`);
+qs('#createSell').onclick=async()=>{
+const title=qs('#sellTitle').value.trim();
+const desc=qs('#sellDesc').value.trim();
+const price=parseFloat(qs('#sellPrice').value);
+const stock=parseInt(qs('#sellStock').value);
+const cat=qs('#sellCat').value;
+if(!title||!cat||isNaN(price)||price<=0||isNaN(stock)||stock<0){qs('#sellMsg').textContent='Fill all fields properly';return;}
+try{
+await db.collection('items').add({title,desc,price,stock,cat,ownerId:currentUser.uid,ownerName:currentUser.displayName||currentUser.email,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+alert('Item listed successfully!');
+closeModal();
+}catch(e){qs('#sellMsg').textContent='Error: '+e.message;}
+};
+qs('#closeModal').onclick=closeModal;
 }
 
-// ============================================
-// AUTHENTICATION FUNCTIONS
-// ============================================
-function showAuthModal() {
-  openModal(`
-    <h2 style="margin-top:0">Sign in / Register</h2>
-    <div style="display:flex;gap:8px;margin-bottom:10px">
-      <button id="tabSign" class="smallbtn ghost">Sign in</button>
-      <button id="tabReg" class="smallbtn ghost">Register</button>
-      <div style="flex:1"></div>
-      <button id="closeModal" class="ghost">Close</button>
-    </div>
-    <div id="authBody"></div>
-    <div class="muted-small" style="margin-top:6px">Or use Google for one-click sign-in.</div>
-  `);
-  
-  qs('#tabSign').onclick = () => renderSignForm();
-  qs('#tabReg').onclick = () => renderRegForm();
-  qs('#closeModal').onclick = closeModal;
-  renderSignForm();
+/* EDIT ITEM */
+function openEditItem(itemId){
+db.collection('items').doc(itemId).get().then(doc=>{
+if(!doc.exists)return alert('Item not found');
+const it=doc.data();
+openModal(`<h2>Edit ${escapeHtml(it.title)}</h2>
+<input id="editTitle" class="input" placeholder="Title" value="${escapeHtml(it.title)}"/>
+<textarea id="editDesc" class="input" placeholder="Description">${escapeHtml(it.desc||'')}</textarea>
+<input id="editPrice" class="input" placeholder="Price" value="${it.price||0}"/>
+<input id="editStock" class="input" placeholder="Stock" value="${it.stock||0}"/>
+<select id="editCat" class="input"><option${it.cat==='Pack'?' selected':''}>Pack</option><option${it.cat==='Single'?' selected':''}>Single</option><option${it.cat==='Accessory'?' selected':''}>Accessory</option></select>
+<div style="display:flex;gap:8px">
+<button class="btn" id="saveEdit">Save Changes</button>
+<button class="ghost" id="closeModal">Cancel</button>
+</div>
+<div id="editMsg" class="muted-small"></div>
+`);
+qs('#saveEdit').onclick=async()=>{
+const title=qs('#editTitle').value.trim();
+const desc=qs('#editDesc').value.trim();
+const price=parseFloat(qs('#editPrice').value);
+const stock=parseInt(qs('#editStock').value);
+const cat=qs('#editCat').value;
+if(!title||!cat||isNaN(price)||price<=0||isNaN(stock)||stock<0){qs('#editMsg').textContent='Fill all fields properly';return;}
+try{
+await db.collection('items').doc(itemId).update({title,desc,price,stock,cat});
+alert('Item updated!');
+closeModal();
+}catch(e){qs('#editMsg').textContent='Error: '+e.message;}
+};
+qs('#closeModal').onclick=closeModal;
+});
 }
 
-function renderSignForm() {
-  qs('#authBody').innerHTML = `
-    <input id="si_email" class="input" placeholder="Email" />
-    <input id="si_pass" class="input" placeholder="Password" type="password" />
-    <div style="display:flex;gap:8px">
-      <button id="doSign" class="btn">Sign in</button>
-      <button id="doGoogle1" class="googleBtn">Sign in with Google</button>
-    </div>
-    <div id="authMsg" class="muted-small" style="margin-top:6px"></div>
-  `;
-  
-  qs('#doSign').onclick = async () => {
-    const email = qs('#si_email').value.trim();
-    const pass = qs('#si_pass').value;
-    if (!validateEmail(email)) {
-      qs('#authMsg').textContent = 'Enter a valid email.';
-      return;
-    }
-    if (!pass || pass.length < 6) {
-      qs('#authMsg').textContent = 'Password required (min 6 chars).';
-      return;
-    }
-    try {
-      await auth.signInWithEmailAndPassword(email, pass);
-      closeModal();
-    } catch (e) {
-      qs('#authMsg').textContent = 'Sign in failed: ' + e.message;
-    }
-  };
-  
-  qs('#doGoogle1').onclick = googleSignIn;
+/* ACCOUNT MODAL */
+function showAccountModal(){
+if(!currentUser)return showAuthModal();
+openModal(`<h2>Account</h2>
+<div class="muted-small">Email: ${escapeHtml(currentUser.email)}</div>
+<div class="muted-small">Name: ${escapeHtml(currentUser.displayName||'')}</div>
+<div style="margin-top:12px">
+<button class="btn" id="logoutBtn">Sign out</button>
+<button class="ghost" id="closeModal">Close</button>
+</div>`);
+qs('#logoutBtn').onclick=()=>auth.signOut();
+qs('#closeModal').onclick=closeModal;
 }
 
-function renderRegForm() {
-  qs('#authBody').innerHTML = `
-    <input id="r_name" class="input" placeholder="Display name" />
-    <input id="r_email" class="input" placeholder="Email" />
-    <input id="r_pass" class="input" placeholder="Password (min 6)" type="password" />
-    <div style="display:flex;gap:8px">
-      <button id="doReg" class="btn">Register</button>
-      <button id="doGoogle2" class="googleBtn">Register with Google</button>
-    </div>
-    <div id="authMsg" class="muted-small" style="margin-top:6px"></div>
-  `;
-  
-  qs('#doReg').onclick = async () => {
-    const name = qs('#r_name').value.trim();
-    const email = qs('#r_email').value.trim();
-    const pass = qs('#r_pass').value;
-    
-    if (!name) {
-      qs('#authMsg').textContent = 'Enter display name.';
-      return;
-    }
-    if (!validateEmail(email)) {
-      qs('#authMsg').textContent = 'Enter a valid email.';
-      return;
-    }
-    if (!pass || pass.length < 6) {
-      qs('#authMsg').textContent = 'Password must be at least 6 characters.';
-      return;
-    }
-    
-    try {
-      const cred = await auth.createUserWithEmailAndPassword(email, pass);
-      await cred.user.updateProfile({ displayName: name });
-      await db.collection('users').doc(cred.user.uid).set({
-        name: name,
-        email: email,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      closeModal();
-    } catch (e) {
-      qs('#authMsg').textContent = 'Registration failed: ' + e.message;
-    }
-  };
-  
-  qs('#doGoogle2').onclick = googleSignIn;
-}
+/* SEARCH & FILTER */
+qs('#search').addEventListener('input',()=>startItemsListener());
+qs('#filterCategory').addEventListener('change',()=>startItemsListener());
+qs('#inStockOnly').addEventListener('change',()=>startItemsListener());
+qs('#sortBy').addEventListener('change',()=>startItemsListener());
 
-function validateEmail(e) {
-  return !!e && /\S+@\S+\.\S+/.test(e);
-}
-
-async function googleSignIn() {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  try {
-    const result = await auth.signInWithPopup(provider);
-    const u = result.user;
-    const doc = await db.collection('users').doc(u.uid).get();
-    if (!doc.exists) {
-      await db.collection('users').doc(u.uid).set({
-        name: u.displayName || '',
-        email: u.email,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    }
-    closeModal();
-  } catch (e) {
-    alert('Google sign-in failed: ' + e.message);
-  }
-}
-
-// ============================================
-// USER AREA RENDERING
-// ============================================
-function renderUserArea() {
-  if (currentUser) {
-    qs('#userArea').innerHTML = `
-      <div style="display:flex;gap:10px;align-items:center">
-        <div style="font-weight:700">${escapeHtml(currentUser.displayName || currentUser.email)}</div>
-        <button id="acctBtn" class="ghost">Account</button>
-      </div>
-    `;
-    qs('#signinBtn').textContent = 'Sign out';
-    qs('#signinBtn').onclick = () => auth.signOut();
-    qs('#sellBtn').onclick = showSellModal;
-    qs('#acctBtn').onclick = showAccountModal;
-    
-    // Start listening to notifications
-    listenNotifications();
-  } else {
-    qs('#userArea').innerHTML = '';
-    qs('#signinBtn').textContent = 'Sign in';
-    qs('#signinBtn').onclick = showAuthModal;
-    qs('#sellBtn').onclick = showAuthModal;
-    qs('#bellCount').style.display = 'none';
-    
-    // Stop listening to notifications
-    if (notifUnsub) {
-      notifUnsub();
-      notifUnsub = null;
-    }
-    notificationsCache = [];
-  }
-}
-
-// ============================================
-// NOTIFICATION SYSTEM (FIXED!)
-// ============================================
-function listenNotifications() {
-  if (!currentUser) return;
-  
-  // Unsubscribe from previous listener if exists
-  if (notifUnsub) notifUnsub();
-  
-  // Listen to notifications in real-time
-  notifUnsub = db.collection('notifications')
-    .where('userId', '==', currentUser.uid)
-    .orderBy('createdAt', 'desc')
-    .limit(50)
-    .onSnapshot(snapshot => {
-      notificationsCache = [];
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        notificationsCache.push({
-          id: doc.id,
-          ...data
-        });
-      });
-      
-      updateBellCount();
-    }, err => {
-      console.error('Notification listener error:', err);
-    });
-}
-
-function updateBellCount() {
-  const count = notificationsCache.length;
-  const bellCountEl = qs('#bellCount');
-  
-  if (count > 0) {
-    bellCountEl.style.display = 'inline-block';
-    bellCountEl.textContent = count;
-  } else {
-    bellCountEl.style.display = 'none';
-  }
-}
-
-function showNotificationsModal() {
-  if (!currentUser) {
-    showAuthModal();
-    return;
-  }
-  
-  let notifHTML = '';
-  
-  if (notificationsCache.length === 0) {
-    notifHTML = `
-      <div class="empty-notif">
-        <div style="font-size:48px;margin-bottom:12px">🔔</div>
-        <div style="font-size:16px;margin-bottom:8px">No notifications yet</div>
-        <div style="font-size:13px">You'll see notifications here when someone buys your items!</div>
-      </div>
-    `;
-  } else {
-    notifHTML = notificationsCache.map(notif => `
-      <div class="notif-item">
-        <button class="delete-notif" onclick="deleteNotification('${notif.id}')">✕</button>
-        <div class="notif-text">${escapeHtml(notif.msg || 'New notification')}</div>
-        <div class="notif-time">${timeAgo(notif.createdAt)}</div>
-      </div>
-    `).join('');
-    
-    notifHTML += `
-      <button class="clear-all-notif" onclick="clearAllNotifications()">Clear All Notifications</button>
-    `;
-  }
-  
-  openModal(`
-    <h2 style="margin-top:0">Notifications ${notificationsCache.length > 0 ? `<span class="badge">${notificationsCache.length}</span>` : ''}</h2>
-    <div style="max-height:400px;overflow-y:auto;margin-bottom:12px">
-      ${notifHTML}
-    </div>
-    <button class="ghost" onclick="closeModal()">Close</button>
-  `);
-}
-
-async function deleteNotification(notifId) {
-  try {
-    await db.collection('notifications').doc(notifId).delete();
-    showNotificationsModal(); // Refresh the modal
-  } catch (e) {
-    alert('Error deleting notification: ' + e.message);
-  }
-}
-
-async function clearAllNotifications() {
-  if (!currentUser) return;
-  
-  const confirm = window.confirm('Clear all notifications?');
-  if (!confirm) return;
-  
-  try {
-    const batch = db.batch();
-    notificationsCache.forEach(notif => {
-      batch.delete(db.collection('notifications').doc(notif.id));
-    });
-    await batch.commit();
-    closeModal();
-  } catch (e) {
-    alert('Error clearing notifications: ' + e.message);
-  }
-}
-
-// ============================================
-// PRODUCTS & BUY FLOW
-// ============================================
-const productsEl = qs('#products');
-const productCountEl = qs('#productCount');
-let itemsUnsub = null;
-
-function startItemsListener() {
-  if (itemsUnsub) itemsUnsub();
-  
-  itemsUnsub = db.collection('items')
-    .orderBy('createdAt', 'desc')
-    .onSnapshot(snapshot => {
-      const arr = [];
-      snapshot.forEach(doc => {
-        const d = doc.data();
-        d.id = doc.id;
-        arr.push(d);
-      });
-      renderProducts(arr);
-    }, err => console.error(err));
-}
-
-function renderProducts(items) {
-  const q = qs('#search').value.toLowerCase();
-  const cat = qs('#filterCategory').value;
-  const inStockOnly = qs('#inStockOnly').checked;
-  const sortBy = qs('#sortBy').value;
-  
-  let filtered = items.slice();
-  
-  if (q) {
-    filtered = filtered.filter(it => 
-      (it.title + (it.desc || '') + (it.ownerName || '')).toLowerCase().includes(q)
-    );
-  }
-  if (cat) {
-    filtered = filtered.filter(it => it.cat === cat);
-  }
-  if (inStockOnly) {
-    filtered = filtered.filter(it => (it.stock || 0) > 0);
-  }
-  
-  if (sortBy === 'price_asc') {
-    filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
-  }
-  if (sortBy === 'price_desc') {
-    filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
-  }
-  
-  productCountEl.textContent = `${filtered.length} items`;
-  productsEl.innerHTML = '';
-  
-  if (filtered.length === 0) {
-    productsEl.innerHTML = `<div class="muted">No products found.</div>`;
-    return;
-  }
-  
-  filtered.forEach(it => {
-    const owner = it.ownerName || 'Seller';
-    const div = document.createElement('div');
-    div.className = 'product';
-    
-    let extra = '';
-    if (currentUser && currentUser.uid === it.ownerId) {
-      extra = `<button class="ghost editBtn" data-id="${it.id}">Edit</button>`;
-    }
-    
-    div.innerHTML = `
-      <h3>${escapeHtml(it.title)}</h3>
-      <div class="meta">
-        <div class="muted">${escapeHtml(it.desc || '')}</div>
-        <div class="tag">${escapeHtml(it.cat || '')}</div>
-      </div>
-      <div class="meta">
-        <div class="muted">${money(it.price || 0)}</div>
-        <div class="muted">${(it.stock || 0)} left</div>
-      </div>
-      <div class="meta">
-        <div class="muted">Seller: ${escapeHtml(owner)}</div>
-        <div class="muted">ID:${escapeHtml(it.id)}</div>
-      </div>
-      <div class="buy-row">
-        <button class="btn buyBtn" data-id="${escapeHtml(it.id)}">Buy</button>
-        <button class="ghost viewBtn" data-id="${escapeHtml(it.id)}">View</button>
-        ${extra}
-      </div>
-    `;
-    productsEl.appendChild(div);
-  });
-  
-  qsa('.buyBtn').forEach(b => b.onclick = () => openBuyModal(b.dataset.id));
-  qsa('.editBtn').forEach(b => b.onclick = () => openEditItem(b.dataset.id));
-  qsa('.viewBtn').forEach(b => b.onclick = () => openViewItem(b.dataset.id));
-}
-
-// ============================================
-// BUY MODAL
-// ============================================
-function openBuyModal(itemId) {
-  if (!current
+/* AUTH LISTENER */
+auth.onAuthStateChanged(user=>{currentUser=user;renderUserArea();startItemsListener();});
+</script>
+</body>
+</html>
