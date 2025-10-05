@@ -398,9 +398,13 @@ openModal(`<h2>Buy ${escapeHtml(it.title)}</h2>
 `);
 qs('#confirmBuy').onclick=async()=>{
 const qty=Math.min(parseInt(qs('#buyQty').value)||1,it.stock||1);
+console.log('Attempting purchase:', {itemId, qty, buyerId: currentUser.uid, sellerId: it.ownerId});
+
 try{
 // Update stock
+console.log('Updating stock...');
 await db.collection('items').doc(itemId).update({stock:(it.stock||0)-qty});
+console.log('Stock updated successfully');
 
 // Create notification for seller
 const notifData = {
@@ -419,7 +423,9 @@ alert('Purchase successful!');
 closeModal();
 }catch(e){
 console.error('Purchase error:', e);
-alert('Error: '+e.message);
+console.error('Error code:', e.code);
+console.error('Error message:', e.message);
+alert('Error: '+e.message + '\n\nMake sure you have proper Firestore permissions.');
 }
 };
 qs('#closeModal').onclick=closeModal;
