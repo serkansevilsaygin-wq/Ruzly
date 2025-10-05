@@ -244,12 +244,14 @@ let cachedNotifications=[];
 async function fetchNotificationsOnce(){
 if(!currentUser) return;
 try{
+console.log('Fetching notifications for user:', currentUser.uid);
 const snapshot = await db.collection('notifications')
 .where('userId','==',currentUser.uid)
 .orderBy('createdAt','desc')
 .limit(50)
 .get();
 const count = snapshot.docs.length;
+console.log('Found notifications:', count);
 cachedNotifications = snapshot.docs;
 const bellCountEl = qs('#bellCount');
 if(count>0){ 
@@ -265,12 +267,14 @@ console.error('Error fetching notifications:',e);
 
 function listenNotifications(){
 if(notifUnsub)notifUnsub();
+console.log('Starting notification listener for user:', currentUser.uid);
 notifUnsub=db.collection('notifications')
 .where('userId','==',currentUser.uid)
 .orderBy('createdAt','desc')
 .limit(50)
 .onSnapshot(snapshot=>{
 const count=snapshot.docs.length;
+console.log('Notification snapshot update - count:', count);
 cachedNotifications = snapshot.docs;
 const bellCountEl=qs('#bellCount');
 if(count>0){
@@ -279,6 +283,8 @@ bellCountEl.textContent=count;
 }else{
 bellCountEl.style.display='none';
 }
+}, error => {
+console.error('Notification listener error:', error);
 });
 }
 
@@ -297,6 +303,8 @@ openModal(`<h2>Notifications</h2><div class="muted">Please sign in to view notif
 qs('#closeModalBtn').onclick=closeModal;
 return;
 }
+
+console.log('Showing notifications, cached count:', cachedNotifications.length);
 
 if(cachedNotifications.length===0){
 openModal(`<h2>Notifications</h2><div class="muted">No notifications yet.</div><button class="ghost" id="closeModalBtn">Close</button>`);
@@ -362,6 +370,10 @@ qsa('.viewBtn').forEach(b=>b.onclick=()=>openViewItem(b.dataset.id));
 
 /* BUY MODAL */
 function openBuyModal(itemId){
+if(!currentUser){
+alert('Please sign in to make a purchase');
+return showAuthModal();
+}
 db.collection('items').doc(itemId).get().then(doc=>{
 if(!doc.exists)return alert('Item not found');
 const it=doc.data();it.id=doc.id;
@@ -369,6 +381,7 @@ if((it.stock||0)<=0)return alert('Out of stock');
 openModal(`<h2>Buy ${escapeHtml(it.title)}</h2>
 <div class="muted-small">Price: ${money(it.price||0)}</div>
 <div class="muted-small">Stock: ${it.stock||0}</div>
+<div class="muted-small">Seller: ${escapeHtml(it.ownerName||'Unknown')}</div>
 <label>Quantity <input type="number" id="buyQty" value="1" min="1" max="${it.stock||1}" class="input"/></label>
 <button class="btn" id="confirmBuy">Confirm Purchase</button>
 <button class="ghost" id="closeModal">Cancel</button>
@@ -376,11 +389,28 @@ openModal(`<h2>Buy ${escapeHtml(it.title)}</h2>
 qs('#confirmBuy').onclick=async()=>{
 const qty=Math.min(parseInt(qs('#buyQty').value)||1,it.stock||1);
 try{
+// Update stock
 await db.collection('items').doc(itemId).update({stock:(it.stock||0)-qty});
-await db.collection('notifications').add({userId:it.ownerId,msg:`${currentUser.displayName||currentUser.email} bought ${qty}x ${it.title}`,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+
+// Create notification for seller
+const notifData = {
+userId: it.ownerId,
+msg: `${currentUser.displayName||currentUser.email} bought ${qty}x ${it.title}`,
+createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+read: false,
+itemId: itemId,
+buyerId: currentUser.uid
+};
+console.log('Creating notification:', notifData);
+const notifRef = await db.collection('notifications').add(notifData);
+console.log('Notification created with ID:', notifRef.id);
+
 alert('Purchase successful!');
 closeModal();
-}catch(e){alert('Error: '+e.message);}
+}catch(e){
+console.error('Purchase error:', e);
+alert('Error: '+e.message);
+}
 };
 qs('#closeModal').onclick=closeModal;
 });
