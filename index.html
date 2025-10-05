@@ -38,6 +38,7 @@ main{display:grid;grid-template-columns:330px 1fr;gap:20px}
 .input,textarea,select{width:100%;padding:10px;border-radius:10px;border:none;background:rgba(255,255,255,0.03);color:var(--panel);outline:none;margin-bottom:8px}
 .badge{background:#ff3b7a;color:white;padding:2px 6px;border-radius:999px;font-size:12px;margin-left:6px}
 .bell{position:relative;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+.bell-count{position:absolute;top:-4px;right:-4px;background:#ff3b7a;color:white;padding:2px 6px;border-radius:999px;font-size:12px}
 footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
 .row{display:flex;gap:8px;align-items:center}
 .muted-small{font-size:13px;color:var(--muted)}
@@ -60,7 +61,7 @@ footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
 </div>
 <div class="top-actions">
 <div id="userArea"></div>
-<div id="notifyArea"></div>
+<div id="notifyArea"><div class="bell" id="bell">🔔<span id="bellCount" class="bell-count" style="display:none">0</span></div></div>
 <button id="signinBtn" class="ghost">Sign in</button>
 </div>
 </header>
@@ -222,14 +223,28 @@ qs('#signinBtn').textContent='Sign out';
 qs('#signinBtn').onclick=()=>auth.signOut();
 qs('#sellBtn').onclick=showSellModal;
 qs('#acctBtn').onclick=showAccountModal;
+listenNotifications();
 }else{
 qs('#userArea').innerHTML='';
 qs('#signinBtn').textContent='Sign in';
 qs('#signinBtn').onclick=showAuthModal;
 qs('#sellBtn').onclick=showAuthModal;
+qs('#bellCount').style.display='none';
 }
 }
-/* PRODUCTS */
+/* NOTIFICATIONS */
+let notifUnsub=null;
+function listenNotifications(){
+if(notifUnsub)notifUnsub();
+notifUnsub=db.collection('notifications').where('userId','==',currentUser.uid).orderBy('createdAt','desc').limit(50).onSnapshot(snapshot=>{
+const count=snapshot.docs.length;
+const bellCountEl=qs('#bellCount');
+if(count>0){bellCountEl.style.display='inline-block';bellCountEl.textContent=count;}else{bellCountEl.style.display='none';}
+qs('#bell').onclick=()=>{openModal(`<h2>Notifications</h2><div>${snapshot.docs.map(d=>'<div>'+escapeHtml(d.data().msg)+'</div>').join('')}</div><button class="ghost" onclick="closeModal()">Close</button>`);}
+});
+}
+
+/* PRODUCTS & BUY FLOW */
 const productsEl=qs('#products');
 const productCountEl=qs('#productCount');
 let itemsUnsub=null;
@@ -274,31 +289,12 @@ ${extra}
 `;
 productsEl.appendChild(div);
 });
-qsa('.buyBtn').forEach(b=>b.onclick=()=>openBuy(b.dataset.id));
-qsa('.viewBtn').forEach(b=>b.onclick=()=>openView(b.dataset.id));
+qsa('.buyBtn').forEach(b=>b.onclick=()=>openBuyModal(b.dataset.id));
 qsa('.editBtn').forEach(b=>b.onclick=()=>openEditItem(b.dataset.id));
+qsa('.viewBtn').forEach(b=>b.onclick=()=>openViewItem(b.dataset.id));
 }
-/* VIEW & BUY */
-function openView(itemId){
-db.collection('items').doc(itemId).get().then(doc=>{
-if(!doc.exists)return alert('Item not found');
-const it=doc.data();it.id=doc.id;
-openModal(`<h2>${escapeHtml(it.title)}</h2>
-<div>
-<div class="muted">${escapeHtml(it.desc||'')}</div>
-<div style="margin-top:8px">${money(it.price||0)}</div>
-<div style="margin-top:8px">Stock: <strong>${it.stock||0}</strong></div>
-<div style="margin-top:12px">
-<button class="btn" id="buyNow">Buy</button> 
-<button class="ghost" id="closeModal">Close</button>
-</div>
-</div>`);
-qs('#buyNow').onclick=()=>{closeModal();openBuy(itemId);};
-qs('#closeModal').onclick=closeModal;
-});
-}
-function openBuy(itemId){
-if(!currentUser)return showAuthModal();
+/* BUY MODAL */
+function openBuyModal(itemId){
 db.collection('items').doc(itemId).get().then(doc=>{
 if(!doc.exists)return alert('Item not found');
 const it=doc.data();it.id=doc.id;
@@ -314,7 +310,7 @@ qs('#confirmBuy').onclick=async()=>{
 const qty=Math.min(parseInt(qs('#buyQty').value)||1,it.stock||1);
 try{
 await db.collection('items').doc(itemId).update({stock:(it.stock||0)-qty});
-await db.collection('notifications').add({userId:currentUser.uid,msg:`Bought ${qty}x ${it.title}`,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+await db.collection('notifications').add({userId:it.ownerId,msg:`${currentUser.displayName||currentUser.email} bought ${qty}x ${it.title}`,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
 alert('Purchase successful!');
 closeModal();
 }catch(e){alert('Error: '+e.message);}
