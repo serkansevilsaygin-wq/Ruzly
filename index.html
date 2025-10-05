@@ -3,47 +3,43 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Rüzly Card Shop </title>
+<title>Rüzly Card Shop</title>
 <style>
-  :root{
-    --bg:#0f0426;
-    --panel:#f6f4ff;
-    --accent:#7a3cff;
-    --accent-2:#b88bff;
-    --muted:#9b91b3;
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  }
-  html,body{height:100%;margin:0;background:linear-gradient(180deg,#0d0320 0%, #12062a 60%);color:var(--panel);-webkit-font-smoothing:antialiased}
-  .container{max-width:1100px;margin:28px auto;padding:20px}
-  header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-  .logo{display:flex;align-items:center;gap:12px}
-  .mark{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:0 8px 30px rgba(122,60,255,0.18)}
-  .searchbar{flex:1;margin-left:14px}
-  .searchbar input{width:100%;padding:12px 16px;border-radius:12px;border:none;outline:none;background:rgba(255,255,255,0.04);color:var(--panel);font-size:15px}
-  .top-actions{display:flex;gap:8px;align-items:center}
-  button.btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:none;padding:10px 14px;border-radius:10px;color:white;font-weight:600;cursor:pointer;box-shadow:0 8px 20px rgba(122,60,255,0.12)}
-  button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.05);color:var(--panel);padding:8px 12px;border-radius:10px}
-  .smallbtn{padding:6px 8px;font-size:13px}
-  main{display:grid;grid-template-columns:330px 1fr;gap:20px}
-  .sidebar{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:14px;box-shadow:0 8px 30px rgba(2,2,2,0.4)}
-  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;margin-bottom:12px}
-  .product-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
-  .product{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px;display:flex;flex-direction:column;gap:10px}
-  .product img{width:100%;height:140px;object-fit:cover;border-radius:8px;background:linear-gradient(180deg,#ddd,#bbb)}
-  .meta{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}
-  .tag{padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.03);font-size:12px}
-  .buy-row{display:flex;gap:8px;align-items:center}
-  .muted{color:var(--muted)}
-  .modal-backdrop{position:fixed;inset:0;background:rgba(3,2,10,0.6);display:none;align-items:center;justify-content:center;z-index:40}
-  .modal{width:560px;background:linear-gradient(180deg,#12051f,#0b0416);border-radius:12px;padding:18px;color:var(--panel);box-shadow:0 20px 80px rgba(0,0,0,0.6)}
-  .input,textarea,select{width:100%;padding:10px;border-radius:10px;border:none;background:rgba(255,255,255,0.03);color:var(--panel);outline:none;margin-bottom:8px}
-  .badge{background:#ff3b7a;color:white;padding:2px 6px;border-radius:999px;font-size:12px;margin-left:6px}
-  .bell{position:relative;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);cursor:pointer}
-  footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
-  .row{display:flex;gap:8px;align-items:center}
-  .muted-small{font-size:13px;color:var(--muted)}
-  .googleBtn{background:linear-gradient(90deg,#ffffff,#f1f1f1);color:#111;border-radius:10px;padding:8px 12px;font-weight:700}
-  @media (max-width:900px){main{grid-template-columns:1fr} .searchbar{order:3}}
+:root{
+  --bg:#0f0426; --panel:#f6f4ff; --accent:#7a3cff; --accent-2:#b88bff; --muted:#9b91b3;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+html,body{height:100%;margin:0;background:linear-gradient(180deg,#0d0320 0%, #12062a 60%);color:var(--panel);-webkit-font-smoothing:antialiased}
+.container{max-width:1100px;margin:28px auto;padding:20px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.logo{display:flex;align-items:center;gap:12px}
+.mark{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:0 8px 30px rgba(122,60,255,0.18)}
+.searchbar{flex:1;margin-left:14px}
+.searchbar input{width:100%;padding:12px 16px;border-radius:12px;border:none;outline:none;background:rgba(255,255,255,0.04);color:var(--panel);font-size:15px}
+.top-actions{display:flex;gap:8px;align-items:center}
+button.btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:none;padding:10px 14px;border-radius:10px;color:white;font-weight:600;cursor:pointer;box-shadow:0 8px 20px rgba(122,60,255,0.12)}
+button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.05);color:var(--panel);padding:8px 12px;border-radius:10px}
+.smallbtn{padding:6px 8px;font-size:13px}
+main{display:grid;grid-template-columns:330px 1fr;gap:20px}
+.sidebar{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:14px;box-shadow:0 8px 30px rgba(2,2,2,0.4)}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;margin-bottom:12px}
+.product-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.product{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px;display:flex;flex-direction:column;gap:10px}
+.product img{width:100%;height:140px;object-fit:cover;border-radius:8px;background:linear-gradient(180deg,#ddd,#bbb)}
+.meta{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}
+.tag{padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.03);font-size:12px}
+.buy-row{display:flex;gap:8px;align-items:center}
+.muted{color:var(--muted)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(3,2,10,0.6);display:none;align-items:center;justify-content:center;z-index:999}
+.modal{width:560px;background:linear-gradient(180deg,#12051f,#0b0416);border-radius:12px;padding:18px;color:var(--panel);box-shadow:0 20px 80px rgba(0,0,0,0.6)}
+.input,textarea,select{width:100%;padding:10px;border-radius:10px;border:none;background:rgba(255,255,255,0.03);color:var(--panel);outline:none;margin-bottom:8px}
+.badge{background:#ff3b7a;color:white;padding:2px 6px;border-radius:999px;font-size:12px;margin-left:6px}
+.bell{position:relative;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+.row{display:flex;gap:8px;align-items:center}
+.muted-small{font-size:13px;color:var(--muted)}
+.googleBtn{background:linear-gradient(90deg,#ffffff,#f1f1f1);color:#111;border-radius:10px;padding:8px 12px;font-weight:700}
+@media (max-width:900px){main{grid-template-columns:1fr} .searchbar{order:3}}
 </style>
 </head>
 <body>
@@ -56,11 +52,9 @@
         <div class="muted" style="font-size:13px">Purple • Futuristic • Live</div>
       </div>
     </div>
-
     <div class="searchbar">
       <input id="search" placeholder="Search cards, packs, sellers..." />
     </div>
-
     <div class="top-actions">
       <div id="userArea"></div>
       <div id="notifyArea"></div>
@@ -117,7 +111,7 @@
 
       <div id="products" class="product-list"></div>
 
-      <footer>Made with ♥ —Rüzly Card Shop 4v </footer>
+      <footer>Made with ♥ — Rüzly Card Shop 4v</footer>
     </section>
   </main>
 </div>
@@ -125,25 +119,23 @@
 <!-- Modal -->
 <div id="modalBack" class="modal-backdrop"><div class="modal" id="modalContent"></div></div>
 
-<!-- Firebase SDKs (compat for simplicity) -->
+<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
 
 <script>
-/* --------------------- Put your firebaseConfig below --------------------- */
+/* ------------------- Firebase config ------------------- */
 const firebaseConfig = {
   apiKey: "AIzaSyDzGTlPWmfz9gg-0EYvvNjZr0dJahTcMrg",
   authDomain: "ruzly-7af10.firebaseapp.com",
   projectId: "ruzly-7af10",
-  storageBucket: "ruzly-7af10.firebasestorage.app",
+  storageBucket: "ruzly-7af10.appspot.com",
   messagingSenderId: "223649665023",
   appId: "1:223649665023:web:c963b16cf626c5184d61ca",
   measurementId: "G-X4NKTW89XH"
 };
-/* ------------------------------------------------------------------------ */
-
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
@@ -152,13 +144,14 @@ const storage = firebase.storage();
 const qs = s => document.querySelector(s);
 const qsa = s => document.querySelectorAll(s);
 let currentUser = null;
-function id(){ return 'i'+Math.random().toString(36).slice(2,9); }
+let lastItems = [];
+
 function money(n){ return '₺'+Number(n||0).toFixed(2); }
 function escapeHtml(str){ return String(str||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
 function openModal(html){ qs('#modalContent').innerHTML = html; qs('#modalBack').style.display = 'flex'; }
 function closeModal(){ qs('#modalBack').style.display = 'none'; qs('#modalContent').innerHTML = ''; }
 
-/* -------------------- AUTH UI (fixed register + Google) -------------------- */
+/* -------------------- Auth -------------------- */
 function showAuthModal(){
   openModal(`<h2 style="margin-top:0">Sign in / Register</h2>
     <div style="display:flex;gap:8px;margin-bottom:10px">
@@ -189,12 +182,9 @@ function renderSignForm(){
   qs('#doSign').onclick = async ()=>{
     const email = qs('#si_email').value.trim();
     const pass = qs('#si_pass').value;
-    if(!validateEmail(email)){ qs('#authMsg').textContent = 'Enter a valid email.'; return; }
-    if(!pass || pass.length < 6){ qs('#authMsg').textContent = 'Password required (min 6 chars).'; return; }
-    try{
-      await auth.signInWithEmailAndPassword(email, pass);
-      closeModal();
-    }catch(e){ qs('#authMsg').textContent = 'Sign in failed: '+e.message; }
+    if(!/\S+@\S+\.\S+/.test(email)){ qs('#authMsg').textContent='Enter a valid email'; return; }
+    if(!pass || pass.length<6){ qs('#authMsg').textContent='Password min 6 chars'; return; }
+    try{ await auth.signInWithEmailAndPassword(email,pass); closeModal(); } catch(e){ qs('#authMsg').textContent=e.message; }
   };
   qs('#doGoogle1').onclick = googleSignIn;
 }
@@ -211,101 +201,88 @@ function renderRegForm(){
     <div id="authMsg" class="muted-small" style="margin-top:6px"></div>
   `;
   qs('#doReg').onclick = async ()=>{
-    const name = qs('#r_name').value.trim();
-    const email = qs('#r_email').value.trim();
-    const pass = qs('#r_pass').value;
-    if(!name) { qs('#authMsg').textContent = 'Enter display name.'; return; }
-    if(!validateEmail(email)){ qs('#authMsg').textContent = 'Enter a valid email.'; return; }
-    if(!pass || pass.length < 6){ qs('#authMsg').textContent = 'Password must be at least 6 characters.'; return; }
+    const name=qs('#r_name').value.trim();
+    const email=qs('#r_email').value.trim();
+    const pass=qs('#r_pass').value;
+    if(!name){ qs('#authMsg').textContent='Enter display name'; return; }
+    if(!/\S+@\S+\.\S+/.test(email)){ qs('#authMsg').textContent='Enter valid email'; return; }
+    if(!pass||pass.length<6){ qs('#authMsg').textContent='Password min 6'; return; }
     try{
-      const cred = await auth.createUserWithEmailAndPassword(email, pass);
-      await cred.user.updateProfile({ displayName: name });
-      await db.collection('users').doc(cred.user.uid).set({
-        name: name,
-        email: email,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
+      const cred=await auth.createUserWithEmailAndPassword(email,pass);
+      await cred.user.updateProfile({displayName:name});
+      await db.collection('users').doc(cred.user.uid).set({name,email,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
       closeModal();
-    }catch(e){ qs('#authMsg').textContent = 'Registration failed: '+e.message; }
+    }catch(e){ qs('#authMsg').textContent=e.message; }
   };
   qs('#doGoogle2').onclick = googleSignIn;
 }
 
-function validateEmail(e){ return !!e && /\S+@\S+\.\S+/.test(e); }
-
 async function googleSignIn(){
-  const provider = new firebase.auth.GoogleAuthProvider();
+  const provider=new firebase.auth.GoogleAuthProvider();
   try{
-    const result = await auth.signInWithPopup(provider);
-    // create user doc if missing
-    const u = result.user;
-    const doc = await db.collection('users').doc(u.uid).get();
-    if(!doc.exists){
-      await db.collection('users').doc(u.uid).set({
-        name: u.displayName || '',
-        email: u.email,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    }
+    const result=await auth.signInWithPopup(provider);
+    const u=result.user;
+    const doc=await db.collection('users').doc(u.uid).get();
+    if(!doc.exists){ await db.collection('users').doc(u.uid).set({name:u.displayName,email:u.email,createdAt:firebase.firestore.FieldValue.serverTimestamp()}); }
     closeModal();
-  }catch(e){ alert('Google sign-in failed: ' + e.message); }
+  }catch(e){ alert('Google sign-in failed: '+e.message); }
 }
 
-/* -------------------- Render user area & notifications -------------------- */
+/* -------------------- User Area -------------------- */
 function renderUserArea(){
   if(currentUser){
-    qs('#userArea').innerHTML = `<div style="display:flex;gap:10px;align-items:center">
-      <div style="font-weight:700">${escapeHtml(currentUser.displayName || currentUser.email)}</div>
+    qs('#userArea').innerHTML=`<div style="display:flex;gap:10px;align-items:center">
+      <div style="font-weight:700">${escapeHtml(currentUser.displayName||currentUser.email)}</div>
       <button id="acctBtn" class="ghost">Account</button>
     </div>`;
-    qs('#signinBtn').textContent = 'Sign out';
-    qs('#signinBtn').onclick = ()=>auth.signOut();
-    qs('#sellBtn').onclick = showSellModal;
-    qs('#acctBtn').onclick = showAccountModal;
+    qs('#signinBtn').textContent='Sign out';
+    qs('#signinBtn').onclick=()=>auth.signOut();
+    qs('#sellBtn').onclick=()=>showSellModal();
+    qs('#acctBtn').onclick=showAccountModal;
   } else {
-    qs('#userArea').innerHTML = '';
-    qs('#signinBtn').textContent = 'Sign in';
-    qs('#signinBtn').onclick = showAuthModal;
-    qs('#sellBtn').onclick = showAuthModal;
+    qs('#userArea').innerHTML='';
+    qs('#signinBtn').textContent='Sign in';
+    qs('#signinBtn').onclick=showAuthModal;
+    qs('#sellBtn').onclick=showAuthModal;
   }
-  // notification area is handled by startNotificationsListener
+  startNotificationsListener();
 }
 
-/* -------------------- Products (Firestore realtime) -------------------- */
+/* -------------------- Products -------------------- */
 const productsEl = qs('#products');
 const productCountEl = qs('#productCount');
-let itemsUnsub = null;
 
 function startItemsListener(){
-  if(itemsUnsub) itemsUnsub();
-  itemsUnsub = db.collection('items').orderBy('createdAt','desc')
-    .onSnapshot(snapshot=>{
-      const arr = [];
-      snapshot.forEach(doc => { const d = doc.data(); d.id = doc.id; arr.push(d); });
-      renderProducts(arr);
-    }, err => console.error(err));
+  db.collection('items').orderBy('createdAt','desc').onSnapshot(snapshot=>{
+    lastItems=[];
+    snapshot.forEach(doc=>{ const d=doc.data(); d.id=doc.id; lastItems.push(d); });
+    renderProducts();
+  });
 }
 
-function renderProducts(items){
-  const q = qs('#search').value.toLowerCase();
-  const cat = qs('#filterCategory').value;
-  const inStockOnly = qs('#inStockOnly').checked;
-  const sortBy = qs('#sortBy').value;
-  let filtered = items.slice();
-  if(q) filtered = filtered.filter(it => (it.title + (it.desc||'') + (it.ownerName||'')).toLowerCase().includes(q));
-  if(cat) filtered = filtered.filter(it => it.cat === cat);
-  if(inStockOnly) filtered = filtered.filter(it => (it.stock || 0) > 0);
-  if(sortBy === 'price_asc') filtered.sort((a,b)=>(a.price||0)-(b.price||0));
-  if(sortBy === 'price_desc') filtered.sort((a,b)=>(b.price||0)-(a.price||0));
-  productCountEl.textContent = `${filtered.length} items`;
-  productsEl.innerHTML = '';
-  if(filtered.length === 0){ productsEl.innerHTML = `<div class="muted">No products found.</div>`; return; }
-  filtered.forEach(it=>{
-    const owner = it.ownerName || 'Seller';
-    const div = document.createElement('div');
-    div.className = 'product';
-    div.innerHTML = `
-      <img src="${escapeHtml(it.imageURL || placeholder(it.title))}" alt="${escapeHtml(it.title)}"/>
+function renderProducts(){
+  let items=lastItems.slice();
+  const q=qs('#search').value.toLowerCase();
+  const cat=qs('#filterCategory').value;
+  const inStock=qs('#inStockOnly').checked;
+  const sort=qs('#sortBy').value;
+
+  if(q) items=items.filter(it=>(it.title+it.desc+it.ownerName).toLowerCase().includes(q));
+  if(cat) items=items.filter(it=>it.cat===cat);
+  if(inStock) items=items.filter(it=>(it.stock||0)>0);
+  if(sort==='price_asc') items.sort((a,b)=>(a.price||0)-(b.price||0));
+  if(sort==='price_desc') items.sort((a,b)=>(b.price||0)-(a.price||0));
+
+  productCountEl.textContent=`${items.length} items`;
+  productsEl.innerHTML='';
+  if(items.length===0){ productsEl.innerHTML='<div class="muted">No products found.</div>'; return; }
+
+  items.forEach(it=>{
+    const owner=it.ownerName||'Seller';
+    const div=document.createElement('div');
+    div.className='product';
+    div.innerHTML=`
+      <img src="${escapeHtml(it.imageURL||placeholder(it.title))}" alt="${escapeHtml(it.title)}"/>
       <h3>${escapeHtml(it.title)}</h3>
       <div class="meta"><div class="muted">${escapeHtml(it.desc||'')}</div><div class="tag">${escapeHtml(it.cat||'')}</div></div>
       <div class="meta"><div class="muted">${money(it.price||0)}</div><div class="muted">${(it.stock||0)} left</div></div>
@@ -317,314 +294,110 @@ function renderProducts(items){
     `;
     productsEl.appendChild(div);
   });
-  qsa('.buyBtn').forEach(b => b.onclick = () => openBuy(b.dataset.id));
-  qsa('.viewBtn').forEach(b => b.onclick = () => openView(b.dataset.id));
+
+  qsa('.buyBtn').forEach(btn=>btn.onclick=()=>buyItem(btn.dataset.id));
+  qsa('.viewBtn').forEach(btn=>viewItem(btn.dataset.id));
 }
 
-function placeholder(title){
-  const svg = encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='#7a3cff'/><stop offset='1' stop-color='#b88bff'/></linearGradient></defs><rect width='100%' height='100%' fill='url(#g)'/><text x='50%' y='50%' fill='white' font-size='28' font-family='sans-serif' dominant-baseline='middle' text-anchor='middle'>${escapeHtml(title)}</text></svg>`);
-  return `data:image/svg+xml;utf8,${svg}`;
+function placeholder(title){ return `https://via.placeholder.com/210x140?text=${encodeURIComponent(title||'Card')}`; }
+
+/* -------------------- Buy / View -------------------- */
+function buyItem(id){
+  if(!currentUser){ alert('Sign in first'); return; }
+  const item=lastItems.find(it=>it.id===id);
+  if(!item || (item.stock||0)<=0){ alert('Item out of stock'); return; }
+  const qty=1;
+  db.collection('orders').add({
+    itemId:id, buyerId:currentUser.uid, qty, price:item.price||0, createdAt:firebase.firestore.FieldValue.serverTimestamp()
+  }).then(()=>alert('Purchase successful!'));
 }
 
-/* -------------------- View & Buy flow (transaction-safe) -------------------- */
-function openView(itemId){
-  db.collection('items').doc(itemId).get().then(doc=>{
-    if(!doc.exists) return alert('Item not found');
-    const it = doc.data(); it.id = doc.id;
-    openModal(`<h2>${escapeHtml(it.title)}</h2>
-      <div style="display:flex;gap:12px">
-        <img src="${escapeHtml(it.imageURL||placeholder(it.title))}" style="width:180px;height:120px;object-fit:cover;border-radius:8px" />
-        <div style="flex:1">
-          <div class="muted">${escapeHtml(it.desc||'')}</div>
-          <div style="margin-top:8px">${money(it.price||0)}</div>
-          <div style="margin-top:8px">Stock: <strong>${it.stock||0}</strong></div>
-          <div style="margin-top:12px"><button class="btn" id="buyNow">Buy</button> <button class="ghost" id="closeModal">Close</button></div>
-        </div>
-      </div>`);
-    qs('#buyNow').onclick = ()=>{ closeModal(); openBuy(itemId); };
-    qs('#closeModal').onclick = closeModal;
-  });
-}
-
-function openBuy(itemId){
-  if(!currentUser) return showAuthModal();
-  db.collection('items').doc(itemId).get().then(doc=>{
-    if(!doc.exists) return alert('Item not found');
-    const it = doc.data(); it.id = doc.id;
-    if((it.stock||0) <= 0) return alert('Out of stock');
-    openModal(`<h2>Buy "${escapeHtml(it.title)}"</h2>
-      <div>
-        <div class="muted">Price: ${money(it.price||0)}</div>
-        <label>Classroom
-          <select id="classroom" class="input"><option>8-D</option><option>8-C</option></select></label>
-        <label>Pickup time
-          <select id="ptime" class="input"><option>09:00</option><option>10:00</option><option>11:00</option><option>12:00</option><option>13:00</option></select></label>
-        <label>Quantity
-          <input id="qty" type="number" min="1" value="1" class="input" />
-        </label>
-        <div style="display:flex;gap:8px">
-          <button id="confirmBuy" class="btn">Confirm & Buy</button>
-          <button id="cancelBuy" class="ghost">Cancel</button>
-        </div>
-      </div>`);
-    qs('#confirmBuy').onclick = async ()=>{
-      const qty = Math.max(1, Number(qs('#qty').value||1));
-      const classroom = qs('#classroom').value;
-      const ptime = qs('#ptime').value;
-      try{
-        const itemRef = db.collection('items').doc(itemId);
-        await db.runTransaction(async tx=>{
-          const snap = await tx.get(itemRef);
-          if(!snap.exists) throw new Error('Item not found');
-          const data = snap.data();
-          const stock = data.stock || 0;
-          if(stock < qty) throw new Error('Not enough stock');
-          tx.update(itemRef, { stock: stock - qty });
-          const orderRef = db.collection('orders').doc();
-          tx.set(orderRef, {
-            itemId: itemId,
-            itemTitle: data.title || '',
-            buyerId: currentUser.uid,
-            buyerName: currentUser.displayName || currentUser.email,
-            qty,
-            classroom,
-            time: ptime,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
-          const sellerId = data.ownerId || null;
-          const now = firebase.firestore.FieldValue.serverTimestamp();
-          if(sellerId){
-            const noteRef = db.collection('notifications').doc();
-            tx.set(noteRef, {
-              recipientId: sellerId,
-              title: 'Item sold',
-              text: `Your item "${data.title}" was purchased x${qty} by ${currentUser.displayName || currentUser.email}.`,
-              orderId: orderRef.id,
-              read: false,
-              createdAt: now
-            });
-          }
-          const n2 = db.collection('notifications').doc();
-          tx.set(n2, {
-            recipientId: currentUser.uid,
-            title: 'Purchase confirmed',
-            text: `You bought "${data.title}" x${qty}. Pickup: ${classroom} at ${ptime}.`,
-            orderId: orderRef.id,
-            read: false,
-            createdAt: now
-          });
-        });
-        closeModal();
-        alert('Purchase successful — notifications created.');
-      }catch(err){
-        alert('Purchase failed: ' + (err.message || err));
-      }
-    };
-    qs('#cancelBuy').onclick = closeModal;
-  });
-}
-
-/* -------------------- Create listing (upload to Storage) -------------------- */
-/* -------------------- Create listing (upload to Storage) -------------------- */
-function showSellModal() {
-  if (!currentUser) return showAuthModal();
-  openModal(`
-    <h2>Create Listing</h2>
-    <div>
-      <input id="li_title" class="input" placeholder="Title" />
-      <input id="li_price" class="input" placeholder="Price (numbers only)" />
-      <input id="li_stock" class="input" placeholder="Stock (integer)" />
-      <select id="li_cat" class="input">
-        <option>Pack</option>
-        <option>Single</option>
-        <option>Accessory</option>
-      </select>
-      <textarea id="li_desc" class="input" placeholder="Description"></textarea>
-      <label class="muted-small">
-        Image (optional)
-        <input type="file" id="li_img" accept="image/*" />
-      </label>
-      <div style="display:flex;gap:8px">
-        <button id="createListBtn" class="btn">Create</button>
-        <button id="cancelList" class="ghost">Cancel</button>
-      </div>
-    </div>
+function viewItem(id){
+  const it=lastItems.find(x=>x.id===id);
+  if(!it){ alert('Item not found'); return; }
+  openModal(`<h2>${escapeHtml(it.title)}</h2>
+    <img src="${escapeHtml(it.imageURL||placeholder(it.title))}" style="width:100%;border-radius:10px;margin:8px 0"/>
+    <p>${escapeHtml(it.desc||'')}</p>
+    <p>Category: ${escapeHtml(it.cat||'')}</p>
+    <p>Price: ${money(it.price||0)}</p>
+    <p>Stock: ${(it.stock||0)}</p>
+    <button class="btn" id="modalBuy">Buy</button> <button class="ghost" id="closeModalBtn">Close</button>
   `);
+  qs('#modalBuy').onclick=()=>{ buyItem(id); closeModal(); };
+  qs('#closeModalBtn').onclick=closeModal;
+}
 
-  qs('#cancelList').onclick = closeModal;
+/* -------------------- Sell -------------------- */
+function showSellModal(){
+  if(!currentUser){ showAuthModal(); return; }
+  openModal(`<h2>Create Listing</h2>
+    <input id="s_title" class="input" placeholder="Title" />
+    <textarea id="s_desc" class="input" placeholder="Description"></textarea>
+    <input id="s_price" class="input" type="number" placeholder="Price (₺)" />
+    <input id="s_stock" class="input" type="number" placeholder="Stock quantity" />
+    <select id="s_cat" class="input">
+      <option>Pack</option><option>Single</option><option>Accessory</option>
+    </select>
+    <input type="file" id="s_file" class="input" />
+    <div style="display:flex;gap:8px"><button class="btn" id="doSell">List</button><button class="ghost" id="cancelSell">Cancel</button></div>
+    <div id="sellMsg" class="muted-small" style="margin-top:6px"></div>
+  `);
+  qs('#cancelSell').onclick=closeModal;
+  qs('#doSell').onclick=async ()=>{
+    const title=qs('#s_title').value.trim();
+    const desc=qs('#s_desc').value.trim();
+    const price=parseFloat(qs('#s_price').value);
+    const stock=parseInt(qs('#s_stock').value);
+    const cat=qs('#s_cat').value;
+    const file=qs('#s_file').files[0];
 
-  qs('#createListBtn').onclick = async () => {
-    const title = qs('#li_title').value.trim() || 'Untitled';
-    const price = parseFloat(qs('#li_price').value) || 0;
-    const stock = parseInt(qs('#li_stock').value) || 1;
-    const cat = qs('#li_cat').value;
-    const desc = qs('#li_desc').value || '';
-    const file = qs('#li_img').files[0];
+    if(!title || !desc || isNaN(price)||isNaN(stock)){ qs('#sellMsg').textContent='Fill all fields properly'; return; }
 
-    try {
-      const docRef = db.collection('items').doc();
-      let imageURL = '';
-
-      if (file) {
-        const safeName = file.name.replace(/[^\w.-]+/g, '_');
-        const path = `images/${docRef.id}_${Date.now()}_${safeName}`;
-        const storageRef = storage.ref(path);
-        const uploadTask = await storageRef.put(file);
-        imageURL = await uploadTask.ref.getDownloadURL();
-      }
-
-      await docRef.set({
-        title,
-        price,
-        stock,
-        cat,
-        desc,
-        ownerId: currentUser.uid,
-        ownerName: currentUser.displayName || currentUser.email,
-        imageURL,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
-
-      closeModal();
-      alert('Listing created successfully!');
-    } catch (e) {
-      alert('Create listing failed: ' + e.message);
+    const docRef=await db.collection('items').add({title,desc,price,stock,cat,ownerId:currentUser.uid,ownerName:currentUser.displayName||currentUser.email,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    let imageURL='';
+    if(file){
+      const ext=file.name.split('.').pop();
+      const path=`images/${docRef.id}_${Date.now()}.${ext}`;
+      const ref=storage.ref(path);
+      await ref.put(file);
+      imageURL=await ref.getDownloadURL();
     }
-  };
-}
-
-
-/* -------------------- Notifications (realtime) -------------------- */
-let notesUnsub = null;
-function startNotificationsListener(){
-  if(!currentUser){
-    if(notesUnsub){ notesUnsub(); notesUnsub = null; }
-    renderNotifyArea([]);
-    return;
-  }
-  if(notesUnsub) notesUnsub();
-  notesUnsub = db.collection('notifications')
-    .where('recipientId','==', currentUser.uid)
-    .orderBy('createdAt','desc')
-    .onSnapshot(snapshot=>{
-      const notes = [];
-      snapshot.forEach(doc=>{ const d = doc.data(); d.id = doc.id; notes.push(d); });
-      renderNotifyArea(notes);
-    }, err => console.error(err));
-}
-
-function renderNotifyArea(notes){
-  const unread = (notes || []).filter(n=>!n.read).length;
-  qs('#notifyArea').innerHTML = '';
-  const bell = document.createElement('div');
-  bell.className = 'bell';
-  bell.innerHTML = '&#128276;';
-  if(unread) bell.innerHTML += ` <span class="badge">${unread}</span>`;
-  bell.onclick = ()=> openNotificationsModal(notes || []);
-  qs('#notifyArea').appendChild(bell);
-}
-
-function openNotificationsModal(notes){
-  if(!currentUser) return showAuthModal();
-  const html = `<h2>Notifications (${(notes||[]).length})</h2>
-    <div style="max-height:50vh;overflow:auto">` + ((notes||[]).length === 0 ? '<div class="muted">No notifications</div>' : notes.map(n=>`
-      <div class="card" style="display:flex;justify-content:space-between;align-items:center">
-        <div>
-          <div style="font-weight:700">${escapeHtml(n.title||'Notification')}</div>
-          <div class="muted">${escapeHtml(n.text||'')}</div>
-          <div class="muted" style="font-size:12px">${n.createdAt && n.createdAt.toDate ? n.createdAt.toDate().toLocaleString() : ''}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          ${n.read ? '' : `<button class="btn markRead" data-id="${n.id}">Mark read</button>`}
-          <button class="ghost delNote" data-id="${n.id}">Delete</button>
-        </div>
-      </div>
-    `).join('')) + `</div>
-    <div style="margin-top:8px;display:flex;gap:8px"><button id="closeModal" class="ghost">Close</button><button id="markAll" class="btn">Mark all read</button></div>`;
-  openModal(html);
-  qsa('.markRead').forEach(b => b.onclick = async ()=>{
-    const nid = b.dataset.id;
-    await db.collection('notifications').doc(nid).update({ read: true });
-    startNotificationsListener();
-    openNotificationsModal(notes);
-  });
-  qsa('.delNote').forEach(b => b.onclick = async ()=>{
-    const nid = b.dataset.id;
-    await db.collection('notifications').doc(nid).delete();
-    startNotificationsListener();
-    openNotificationsModal(notes);
-  });
-  qs('#markAll').onclick = async ()=>{
-    const batch = db.batch();
-    (notes||[]).forEach(n=>{ if(!n.read) batch.update(db.collection('notifications').doc(n.id), { read: true }); });
-    await batch.commit();
-    startNotificationsListener();
-    openNotificationsModal(notes);
-  };
-  qs('#closeModal').onclick = closeModal;
-}
-
-/* -------------------- Account modal -------------------- */
-function showAccountModal(){
-  if(!currentUser) return showAuthModal();
-  db.collection('orders').where('buyerId','==',currentUser.uid).orderBy('createdAt','desc').get().then(snap=>{
-    const orders = [];
-    snap.forEach(doc=>{ const d = doc.data(); d.id = doc.id; orders.push(d); });
-    openModal(`<h2>Account</h2>
-      <div>
-        <div class="muted-small">Name: ${escapeHtml(currentUser.displayName||'')}</div>
-        <div class="muted-small">Email: ${escapeHtml(currentUser.email)}</div>
-        <div style="margin-top:8px"><button id="chgName" class="ghost">Change display name</button> <button id="closeModal" class="ghost">Close</button></div>
-        <h3 style="margin-top:12px">My Orders (${orders.length})</h3>
-        <div style="max-height:40vh;overflow:auto">${orders.length===0?'<div class="muted">No orders</div>': orders.map(o=>`<div class="card">${escapeHtml(o.itemTitle||o.itemId)} x${o.qty} • ${escapeHtml(o.classroom)} @${escapeHtml(o.time)} • ${o.createdAt && o.createdAt.toDate ? o.createdAt.toDate().toLocaleString() : ''}</div>`).join('')}</div>
-      </div>`);
-    qs('#chgName').onclick = changeDisplayName;
-    qs('#closeModal').onclick = closeModal;
-  });
-}
-
-function changeDisplayName(){
-  openModal(`<h2>Change display name</h2><div><input id="newName" class="input" placeholder="New display name" /><div style="display:flex;gap:8px"><button id="doCh" class="btn">Save</button><button id="cancel" class="ghost">Cancel</button></div></div>`);
-  qs('#cancel').onclick = ()=>{ closeModal(); showAccountModal(); };
-  qs('#doCh').onclick = async ()=>{
-    const nm = qs('#newName').value.trim();
-    if(!nm) return alert('Enter a name');
-    await auth.currentUser.updateProfile({ displayName: nm });
-    await db.collection('users').doc(auth.currentUser.uid).set({ name: nm, email: auth.currentUser.email, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+    if(imageURL) await docRef.update({imageURL});
     closeModal();
-    alert('Name updated');
+    alert('Item listed successfully!');
   };
 }
 
-/* -------------------- Listeners & startup -------------------- */
-qs('#search').oninput = () => { /* rendering handled by snapshot */ };
-qs('#filterCategory').onchange = () => { /* handled by snapshot sorting */ };
-qs('#inStockOnly').onchange = () => { /* handled by snapshot filtering */ };
-qs('#sortBy').onchange = () => { /* handled by snapshot sorting */ };
+/* -------------------- Account -------------------- */
+function showAccountModal(){
+  openModal(`<h2>Account Info</h2>
+    <p>Name: ${escapeHtml(currentUser.displayName||'')}</p>
+    <p>Email: ${escapeHtml(currentUser.email)}</p>
+    <button class="btn" id="closeAcct">Close</button>
+  `);
+  qs('#closeAcct').onclick=closeModal;
+}
 
-auth.onAuthStateChanged(async u=>{
-  currentUser = u;
+/* -------------------- Notifications (dummy) -------------------- */
+function startNotificationsListener(){
+  qs('#notifyArea').innerHTML=`<div class="bell">🔔<span class="badge">0</span></div>`;
+}
+
+/* -------------------- Event Listeners -------------------- */
+qs('#search').oninput=renderProducts;
+qs('#filterCategory').onchange=renderProducts;
+qs('#inStockOnly').onchange=renderProducts;
+qs('#sortBy').onchange=renderProducts;
+qs('#modalBack').onclick=(e)=>{ if(e.target===qs('#modalBack')) closeModal(); };
+
+/* -------------------- Auth listener -------------------- */
+auth.onAuthStateChanged(user=>{
+  currentUser=user;
   renderUserArea();
-  if(u){
-    const ud = db.collection('users').doc(u.uid);
-    const snap = await ud.get();
-    if(!snap.exists){
-      await ud.set({ name: u.displayName || '', email: u.email, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-    }
-    startNotificationsListener();
-  } else {
-    startNotificationsListener();
-  }
 });
 
-/* Start items listener */
+/* -------------------- Init -------------------- */
 startItemsListener();
-
-/* Bind sell button */
-qs('#sellBtn').onclick = ()=> showSellModal();
-
-/* small helper to log */
-console.log('CardVerse v4 loaded — Firebase project:', firebaseConfig.projectId);
 </script>
 </body>
 </html>
