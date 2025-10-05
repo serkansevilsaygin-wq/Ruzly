@@ -61,7 +61,7 @@ footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
 </div>
 <div class="top-actions">
 <div id="userArea"></div>
-<div id="notifyArea"><div class="bell" id="bell">🔔<span id="bellCount" class="bell-count" style="display:none">0</span></div></div>
+<div id="notifyArea"><div class="bell" id="bellIcon">🔔<span id="bellCount" class="bell-count" style="display:none">0</span></div></div>
 <button id="signinBtn" class="ghost">Sign in</button>
 </div>
 </header>
@@ -240,6 +240,7 @@ if(notifUnsub)notifUnsub();
 /* NOTIFICATIONS */
 let notifUnsub=null;
 let cachedNotifications=[];
+
 async function fetchNotificationsOnce(){
 if(!currentUser) return;
 try{
@@ -251,35 +252,63 @@ const snapshot = await db.collection('notifications')
 const count = snapshot.docs.length;
 cachedNotifications = snapshot.docs;
 const bellCountEl = qs('#bellCount');
-if(count>0){ bellCountEl.style.display='inline-block'; bellCountEl.textContent = count; } 
-else{ bellCountEl.style.display='none'; }
-setupBellClick();
-}catch(e){console.error('Error fetching notifications:',e);}
+if(count>0){ 
+bellCountEl.style.display='inline-block'; 
+bellCountEl.textContent = count; 
+} else{ 
+bellCountEl.style.display='none'; 
 }
+}catch(e){
+console.error('Error fetching notifications:',e);
+}
+}
+
 function listenNotifications(){
 if(notifUnsub)notifUnsub();
-notifUnsub=db.collection('notifications').where('userId','==',currentUser.uid).orderBy('createdAt','desc').limit(50)
+notifUnsub=db.collection('notifications')
+.where('userId','==',currentUser.uid)
+.orderBy('createdAt','desc')
+.limit(50)
 .onSnapshot(snapshot=>{
 const count=snapshot.docs.length;
 cachedNotifications = snapshot.docs;
 const bellCountEl=qs('#bellCount');
-if(count>0){bellCountEl.style.display='inline-block';bellCountEl.textContent=count;}else{bellCountEl.style.display='none';}
-setupBellClick();
+if(count>0){
+bellCountEl.style.display='inline-block';
+bellCountEl.textContent=count;
+}else{
+bellCountEl.style.display='none';
+}
 });
 }
-function setupBellClick(){
-qs('#bell').onclick=()=>{
+
+// Set up bell click handler globally
+document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('click', function(e){
+if(e.target.id === 'bellIcon' || e.target.closest('#bellIcon')){
+showNotificationsModal();
+}
+});
+});
+
+function showNotificationsModal(){
+if(!currentUser){
+openModal(`<h2>Notifications</h2><div class="muted">Please sign in to view notifications.</div><button class="ghost" id="closeModalBtn">Close</button>`);
+qs('#closeModalBtn').onclick=closeModal;
+return;
+}
+
 if(cachedNotifications.length===0){
 openModal(`<h2>Notifications</h2><div class="muted">No notifications yet.</div><button class="ghost" id="closeModalBtn">Close</button>`);
+qs('#closeModalBtn').onclick=closeModal;
 }else{
 const notifHtml = cachedNotifications.map(d=>{
 const data = d.data();
-return `<div style="padding:10px;background:rgba(255,255,255,0.02);border-radius:8px;margin-bottom:8px">${escapeHtml(data.msg||'')}</div>`;
+return `<div style="padding:10px;background:rgba(255,255,255,0.02);border-radius:8px;margin-bottom:8px">${escapeHtml(data.msg||'No message')}</div>`;
 }).join('');
 openModal(`<h2>Notifications</h2><div style="max-height:400px;overflow-y:auto">${notifHtml}</div><button class="ghost" id="closeModalBtn">Close</button>`);
-}
 qs('#closeModalBtn').onclick=closeModal;
-};
+}
 }
 
 /* PRODUCTS & BUY FLOW */
