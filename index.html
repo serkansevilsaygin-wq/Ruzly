@@ -239,6 +239,7 @@ if(notifUnsub)notifUnsub();
 
 /* NOTIFICATIONS */
 let notifUnsub=null;
+let cachedNotifications=[];
 async function fetchNotificationsOnce(){
 if(!currentUser) return;
 try{
@@ -248,9 +249,11 @@ const snapshot = await db.collection('notifications')
 .limit(50)
 .get();
 const count = snapshot.docs.length;
+cachedNotifications = snapshot.docs;
 const bellCountEl = qs('#bellCount');
 if(count>0){ bellCountEl.style.display='inline-block'; bellCountEl.textContent = count; } 
 else{ bellCountEl.style.display='none'; }
+setupBellClick();
 }catch(e){console.error('Error fetching notifications:',e);}
 }
 function listenNotifications(){
@@ -258,10 +261,25 @@ if(notifUnsub)notifUnsub();
 notifUnsub=db.collection('notifications').where('userId','==',currentUser.uid).orderBy('createdAt','desc').limit(50)
 .onSnapshot(snapshot=>{
 const count=snapshot.docs.length;
+cachedNotifications = snapshot.docs;
 const bellCountEl=qs('#bellCount');
 if(count>0){bellCountEl.style.display='inline-block';bellCountEl.textContent=count;}else{bellCountEl.style.display='none';}
-qs('#bell').onclick=()=>{openModal(`<h2>Notifications</h2><div>${snapshot.docs.map(d=>'<div>'+escapeHtml(d.data().msg)+'</div>').join('')}</div><button class="ghost" onclick="closeModal()">Close</button>`);}
+setupBellClick();
 });
+}
+function setupBellClick(){
+qs('#bell').onclick=()=>{
+if(cachedNotifications.length===0){
+openModal(`<h2>Notifications</h2><div class="muted">No notifications yet.</div><button class="ghost" id="closeModalBtn">Close</button>`);
+}else{
+const notifHtml = cachedNotifications.map(d=>{
+const data = d.data();
+return `<div style="padding:10px;background:rgba(255,255,255,0.02);border-radius:8px;margin-bottom:8px">${escapeHtml(data.msg||'')}</div>`;
+}).join('');
+openModal(`<h2>Notifications</h2><div style="max-height:400px;overflow-y:auto">${notifHtml}</div><button class="ghost" id="closeModalBtn">Close</button>`);
+}
+qs('#closeModalBtn').onclick=closeModal;
+};
 }
 
 /* PRODUCTS & BUY FLOW */
